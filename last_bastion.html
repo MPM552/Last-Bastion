@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Last Bastion</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;600;900&display=swap');
+
+  :root {
+    --stone: #1a1a1e;
+    --stone-light: #252530;
+    --stone-mid: #38384a;
+    --stone-border: #4a4a60;
+    --gold: #d4a83a;
+    --gold-bright: #f0c855;
+    --gold-dim: #7a601a;
+    --parchment: #e8dcc8;
+    --parchment-dim: #a89878;
+    --blood: #8b1a1a;
+    --blood-bright: #cc3333;
+    --ice: #4ac8d8;
+    --teal: #2aa890;
+    --purple: #8855cc;
+    --green: #55aa44;
+    --fog: rgba(200,190,170,0.06);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--stone);
+    color: var(--parchment);
+    font-family: 'IM Fell English', Georgia, serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.01) 0px, transparent 1px, transparent 40px),
+      repeating-linear-gradient(90deg, rgba(255,255,255,0.01) 0px, transparent 1px, transparent 40px);
+    pointer-events: none; z-index: 0;
+  }
+
+  .wrapper {
+    position: relative; z-index: 1;
+    max-width: 1100px; margin: 0 auto;
+    padding: 14px 18px 40px;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--stone-border);
+  }
+
+  h1 {
+    font-family: 'Cinzel', serif; font-size: 1.7rem; font-weight: 900;
+    color: var(--gold-bright);
+    text-shadow: 0 0 40px rgba(212,168,58,0.5), 0 2px 6px rgba(0,0,0,0.9);
+    letter-spacing: 0.12em;
+  }
+
+  .subtitle { font-style: italic; color: var(--parchment-dim); font-size: 0.78rem; letter-spacing: 0.06em; margin-top: 2px; }
+
+  .hud {
+    display: flex; gap: 10px;
+    align-items: center;
+  }
+
+  .hud-stat {
+    background: var(--stone-light);
+    border: 1px solid var(--stone-border);
+    border-top: 2px solid var(--gold-dim);
+    border-radius: 3px;
+    padding: 5px 14px;
+    text-align: center;
+    min-width: 80px;
+  }
+
+  .hud-label { font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.18em; color: var(--parchment-dim); }
+  .hud-val { font-family: 'Cinzel', serif; font-size: 1.1rem; color: var(--gold-bright); }
+
+  .main-grid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 14px;
+  }
+
+  .panel {
+    background: var(--stone-light);
+    border: 1px solid var(--stone-border);
+    border-radius: 4px;
+    padding: 14px;
+  }
+
+  .panel-title {
+    font-family: 'Cinzel', serif; font-size: 0.75rem;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold-dim);
+    border-bottom: 1px solid var(--stone-border);
+    padding-bottom: 8px; margin-bottom: 12px;
+  }
+
+  /* TROOP ROSTER */
+  .troop-slot {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--stone);
+    border: 1px solid var(--stone-border);
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin-bottom: 6px;
+    position: relative;
+    transition: border-color 0.2s;
+  }
+
+  .troop-slot.dead { opacity: 0.4; border-color: var(--blood); }
+  .troop-slot.active-attacker { border-color: var(--gold); }
+
+  .troop-icon {
+    font-size: 1.4rem; width: 34px; text-align: center; flex-shrink: 0;
+  }
+
+  .troop-info { flex: 1; }
+  .troop-name { font-family: 'Cinzel', serif; font-size: 0.78rem; color: var(--gold-bright); }
+  .troop-class { font-size: 0.65rem; color: var(--parchment-dim); font-style: italic; }
+
+  .hp-bar-wrap { margin-top: 4px; background: var(--stone-mid); border-radius: 2px; height: 5px; }
+  .hp-bar { height: 5px; border-radius: 2px; background: var(--green); transition: width 0.3s; }
+
+  .troop-stats { font-size: 0.65rem; color: var(--parchment-dim); margin-top: 2px; }
+
+  .attack-pip-row { display: flex; gap: 3px; margin-top: 4px; }
+  .attack-pip { width: 10px; height: 10px; border-radius: 50%; background: var(--stone-mid); border: 1px solid var(--stone-border); }
+  .attack-pip.ready { background: var(--gold); border-color: var(--gold-bright); }
+
+  .remove-troop {
+    background: none; border: none; color: var(--blood-bright);
+    cursor: pointer; font-size: 1rem; padding: 4px;
+    opacity: 0.6; transition: opacity 0.15s;
+    font-family: serif;
+  }
+  .remove-troop:hover { opacity: 1; }
+
+  .empty-roster {
+    text-align: center; color: var(--parchment-dim);
+    font-style: italic; font-size: 0.85rem;
+    padding: 24px 0;
+  }
+
+  /* LOG */
+  .log-panel {
+    height: 140px; overflow-y: auto;
+    background: var(--stone);
+    border: 1px solid var(--stone-border);
+    border-radius: 3px; padding: 8px 10px;
+    margin-top: 10px;
+  }
+
+  .log-entry {
+    font-size: 0.72rem; color: var(--parchment-dim);
+    padding: 2px 0; border-bottom: 1px solid rgba(255,255,255,0.03);
+    line-height: 1.4;
+  }
+  .log-entry.dmg { color: var(--blood-bright); }
+  .log-entry.heal { color: var(--green); }
+  .log-entry.crit { color: var(--gold-bright); font-style: italic; }
+  .log-entry.info { color: var(--ice); }
+  .log-entry.win { color: var(--green); font-family: 'Cinzel', serif; }
+  .log-entry.lose { color: var(--blood-bright); font-family: 'Cinzel', serif; }
+
+  /* SHOP PANEL */
+  .shop-item {
+    background: var(--stone);
+    border: 1px solid var(--stone-border);
+    border-radius: 4px; padding: 8px 10px;
+    margin-bottom: 6px; display: flex;
+    align-items: center; gap: 10px;
+    transition: border-color 0.2s;
+  }
+  .shop-item:hover:not(.disabled) { border-color: var(--gold-dim); }
+
+  .shop-icon { font-size: 1.3rem; width: 30px; text-align: center; flex-shrink: 0; }
+  .shop-info { flex: 1; }
+  .shop-name { font-family: 'Cinzel', serif; font-size: 0.75rem; color: var(--parchment); }
+  .shop-desc { font-size: 0.62rem; color: var(--parchment-dim); margin-top: 1px; }
+
+  .buy-btn {
+    background: var(--stone-light);
+    border: 1px solid var(--gold-dim);
+    color: var(--gold-bright);
+    font-family: 'Cinzel', serif; font-size: 0.68rem;
+    padding: 5px 10px; border-radius: 3px;
+    cursor: pointer; white-space: nowrap;
+    transition: background 0.15s, border-color 0.15s;
+    letter-spacing: 0.05em;
+  }
+  .buy-btn:hover:not(:disabled) { background: rgba(212,168,58,0.12); border-color: var(--gold-bright); }
+  .buy-btn:disabled { opacity: 0.35; cursor: not-allowed; border-color: var(--stone-border); color: var(--parchment-dim); }
+
+  .cost-badge {
+    font-size: 0.62rem; color: var(--gold);
+    display: block; margin-top: 2px;
+  }
+
+  /* END DAY BUTTON */
+  .end-day-wrap { text-align: center; margin-top: 10px; }
+
+  .end-day-btn {
+    background: linear-gradient(180deg, var(--blood) 0%, #5a0f0f 100%);
+    border: 1px solid var(--blood-bright); border-radius: 4px;
+    color: var(--parchment); font-family: 'Cinzel', serif;
+    font-size: 0.85rem; font-weight: 600; letter-spacing: 0.12em;
+    padding: 10px 32px; cursor: pointer;
+    text-transform: uppercase;
+    transition: filter 0.15s;
+    width: 100%;
+  }
+  .end-day-btn:hover:not(:disabled) { filter: brightness(1.25); }
+  .end-day-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* BATTLE OVERLAY */
+  .battle-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.82);
+    z-index: 100;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.35s;
+  }
+  .battle-overlay.active { opacity: 1; pointer-events: all; }
+
+  .battle-frame {
+    background: var(--stone-light);
+    border: 2px solid var(--stone-border);
+    border-radius: 6px;
+    width: 680px; max-width: 95vw;
+    max-height: 90vh;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+
+  .battle-header {
+    background: var(--stone);
+    border-bottom: 1px solid var(--stone-border);
+    padding: 12px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .battle-title {
+    font-family: 'Cinzel', serif; font-size: 1.1rem; font-weight: 900;
+    color: var(--gold-bright); letter-spacing: 0.12em;
+  }
+
+  .battle-body { display: flex; gap: 0; flex: 1; overflow: hidden; }
+
+  .battle-side {
+    flex: 1; padding: 14px;
+    display: flex; flex-direction: column; gap: 6px;
+    overflow-y: auto;
+  }
+
+  .battle-side.allies { border-right: 1px solid var(--stone-border); }
+
+  .battle-side-title {
+    font-family: 'Cinzel', serif; font-size: 0.65rem;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--parchment-dim); margin-bottom: 4px;
+  }
+
+  .battle-unit {
+    background: var(--stone);
+    border: 1px solid var(--stone-border);
+    border-radius: 3px; padding: 6px 10px;
+    font-size: 0.7rem;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .battle-unit.attacking { border-color: var(--gold); background: rgba(212,168,58,0.08); }
+  .battle-unit.hit { border-color: var(--blood-bright); background: rgba(180,30,30,0.12); }
+  .battle-unit.dead { opacity: 0.3; border-style: dashed; }
+
+  .battle-unit-name { font-family: 'Cinzel', serif; font-size: 0.68rem; color: var(--parchment); }
+
+  .battle-log-wrap {
+    border-top: 1px solid var(--stone-border);
+    padding: 8px 14px;
+    max-height: 150px; overflow-y: auto;
+    background: var(--stone);
+    flex-shrink: 0;
+  }
+
+  .battle-footer {
+    padding: 10px 14px;
+    border-top: 1px solid var(--stone-border);
+    display: flex; gap: 10px; align-items: center;
+    justify-content: space-between;
+  }
+
+  .speed-btn {
+    background: var(--stone); border: 1px solid var(--stone-border);
+    color: var(--parchment-dim); font-size: 0.7rem;
+    padding: 4px 12px; border-radius: 3px; cursor: pointer;
+    font-family: 'Cinzel', serif; transition: border-color 0.15s;
+  }
+  .speed-btn:hover { border-color: var(--gold-dim); }
+  .speed-btn.active { border-color: var(--gold); color: var(--gold-bright); }
+
+  .skip-btn {
+    background: var(--stone-light); border: 1px solid var(--stone-border);
+    color: var(--parchment-dim); font-size: 0.72rem;
+    padding: 5px 14px; border-radius: 3px; cursor: pointer;
+    font-family: 'Cinzel', serif; transition: border-color 0.15s;
+  }
+  .skip-btn:hover { border-color: var(--gold-dim); color: var(--parchment); }
+
+  /* RESULT OVERLAY */
+  .result-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.88);
+    z-index: 200;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.4s;
+  }
+  .result-overlay.active { opacity: 1; pointer-events: all; }
+
+  .result-box {
+    background: var(--stone-light);
+    border: 2px solid var(--stone-border);
+    border-radius: 6px;
+    padding: 32px 44px;
+    text-align: center;
+    max-width: 400px;
+  }
+
+  .result-title {
+    font-family: 'Cinzel', serif; font-size: 2rem; font-weight: 900;
+    letter-spacing: 0.14em; margin-bottom: 10px;
+  }
+  .result-title.win { color: var(--gold-bright); }
+  .result-title.lose { color: var(--blood-bright); }
+
+  .result-msg { font-style: italic; color: var(--parchment-dim); font-size: 0.9rem; margin-bottom: 24px; line-height: 1.6; }
+
+  .result-btn {
+    background: var(--stone); border: 1px solid var(--gold-dim);
+    color: var(--gold-bright); font-family: 'Cinzel', serif;
+    font-size: 0.78rem; letter-spacing: 0.1em;
+    padding: 9px 24px; border-radius: 3px;
+    cursor: pointer; margin: 4px;
+    transition: background 0.15s;
+  }
+  .result-btn:hover { background: rgba(212,168,58,0.12); border-color: var(--gold-bright); }
+
+  /* CHARACTER SELECTION */
+  .char-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.9);
+    z-index: 300;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.35s;
+  }
+  .char-overlay.active { opacity: 1; pointer-events: all; }
+
+  .char-frame {
+    background: var(--stone-light);
+    border: 2px solid var(--stone-border);
+    border-radius: 6px;
+    padding: 28px 32px;
+    max-width: 620px; width: 95vw;
+  }
+
+  .char-frame-title {
+    font-family: 'Cinzel', serif; font-size: 1.2rem; font-weight: 900;
+    color: var(--gold-bright); text-align: center;
+    letter-spacing: 0.12em; margin-bottom: 6px;
+  }
+  .char-frame-sub { text-align: center; color: var(--parchment-dim); font-style: italic; font-size: 0.82rem; margin-bottom: 20px; }
+
+  .char-options { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+
+  .char-card {
+    background: var(--stone);
+    border: 1px solid var(--stone-border);
+    border-radius: 5px; padding: 16px;
+    flex: 1; min-width: 160px; max-width: 200px;
+    cursor: pointer; transition: border-color 0.2s, transform 0.15s;
+    text-align: center;
+  }
+  .char-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+  .char-card .char-icon { font-size: 2.2rem; margin-bottom: 8px; }
+  .char-card .char-cname { font-family: 'Cinzel', serif; font-size: 0.8rem; color: var(--gold-bright); margin-bottom: 4px; }
+  .char-card .char-level { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--parchment-dim); margin-bottom: 8px; }
+  .char-card .char-stat { font-size: 0.65rem; color: var(--parchment-dim); line-height: 1.7; }
+  .char-card .char-cost { font-family: 'Cinzel', serif; font-size: 0.72rem; color: var(--gold); margin-top: 10px; }
+
+  /* WAVE BANNER */
+  .wave-banner {
+    text-align: center;
+    padding: 7px;
+    background: var(--stone);
+    border: 1px solid var(--stone-border);
+    border-radius: 3px;
+  }
+
+  .wave-text { font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.15em; color: var(--parchment-dim); }
+  .wave-title { font-family: 'Cinzel', serif; font-size: 1rem; color: var(--gold); letter-spacing: 0.1em; }
+
+  .enemy-preview { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; justify-content: center; }
+  .enemy-chip {
+    background: rgba(139,26,26,0.18); border: 1px solid var(--blood);
+    border-radius: 3px; padding: 2px 8px;
+    font-size: 0.65rem; color: var(--parchment-dim);
+    font-family: 'Cinzel', serif;
+  }
+
+  /* INTRO */
+  .intro-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.96);
+    z-index: 400;
+    display: flex; align-items: center; justify-content: center;
+    transition: opacity 0.5s;
+  }
+  .intro-box {
+    max-width: 520px; text-align: center; padding: 40px 32px;
+  }
+  .intro-title {
+    font-family: 'Cinzel', serif; font-size: 2.4rem; font-weight: 900;
+    color: var(--gold-bright); letter-spacing: 0.14em;
+    margin-bottom: 10px;
+    text-shadow: 0 0 60px rgba(212,168,58,0.4);
+  }
+  .intro-sub { font-style: italic; color: var(--parchment-dim); font-size: 0.95rem; line-height: 1.7; margin-bottom: 28px; }
+  .intro-start {
+    background: rgba(212,168,58,0.1); border: 1px solid var(--gold);
+    color: var(--gold-bright); font-family: 'Cinzel', serif;
+    font-size: 0.9rem; letter-spacing: 0.15em; padding: 12px 36px;
+    border-radius: 3px; cursor: pointer; transition: background 0.2s;
+  }
+  .intro-start:hover { background: rgba(212,168,58,0.2); }
+
+  .gold-text { color: var(--gold-bright); }
+  .level-badge {
+    font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.15em;
+    padding: 1px 6px; border-radius: 2px; font-family: 'Cinzel', serif;
+    margin-left: 6px;
+  }
+  .lv1 { background: rgba(85,170,68,0.18); color: var(--green); border: 1px solid var(--green); }
+  .lv2 { background: rgba(136,85,204,0.18); color: var(--purple); border: 1px solid var(--purple); }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--stone); }
+  ::-webkit-scrollbar-thumb { background: var(--stone-border); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<!-- INTRO -->
+<div class="intro-overlay" id="introOverlay">
+  <div class="intro-box">
+    <div class="intro-title">THE LAST BASTION</div>
+    <div class="intro-sub">
+      The darkness gathers at the edge of the world.<br>
+      Each night the horde grows larger. Each dawn fewer stand.<br>
+      Spend your gold wisely — for when the sun sets, they come.
+    </div>
+    <button class="intro-start" onclick="startGame()">Raise the Gates</button>
+  </div>
+</div>
+
+<!-- CHARACTER SELECTION -->
+<div class="char-overlay" id="charOverlay">
+  <div class="char-frame">
+    <div class="char-frame-title">Choose Your Fighter</div>
+    <div class="char-frame-sub" id="charSubText">A wanderer arrives at your gate. Recruit one.</div>
+    <div class="char-options" id="charOptions"></div>
+  </div>
+</div>
+
+<!-- BATTLE OVERLAY -->
+<div class="battle-overlay" id="battleOverlay">
+  <div class="battle-frame">
+    <div class="battle-header">
+      <div class="battle-title" id="battleWaveTitle">Night Falls — Wave 1</div>
+      <div style="font-size:0.7rem; color:var(--parchment-dim); font-style:italic;" id="battleRound">Round 1</div>
+    </div>
+    <div class="battle-body">
+      <div class="battle-side allies">
+        <div class="battle-side-title">Defenders</div>
+        <div id="battleAllies"></div>
+      </div>
+      <div class="battle-side">
+        <div class="battle-side-title">Attackers</div>
+        <div id="battleEnemies"></div>
+      </div>
+    </div>
+    <div class="battle-log-wrap" id="battleLogWrap">
+      <div id="battleLog"></div>
+    </div>
+    <div class="battle-footer">
+      <div style="display:flex;gap:6px;">
+        <button class="speed-btn active" id="speed1Btn" onclick="setSpeed(1)">1×</button>
+        <button class="speed-btn" id="speed2Btn" onclick="setSpeed(2)">2×</button>
+        <button class="speed-btn" id="speed3Btn" onclick="setSpeed(4)">4×</button>
+      </div>
+      <button class="skip-btn" id="skipBattleBtn" onclick="skipBattle()">Skip Battle</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULT OVERLAY -->
+<div class="result-overlay" id="resultOverlay">
+  <div class="result-box">
+    <div class="result-title" id="resultTitle">Victory</div>
+    <div class="result-msg" id="resultMsg"></div>
+    <div id="resultButtons"></div>
+  </div>
+</div>
+
+<!-- MAIN UI -->
+<div class="wrapper">
+  <header>
+    <div>
+      <h1>THE LAST BASTION</h1>
+      <div class="subtitle">Incremental Tower Defense</div>
+    </div>
+    <div class="hud">
+      <div class="hud-stat">
+        <div class="hud-label">Gold</div>
+        <div class="hud-val gold-text" id="hudGold">10</div>
+      </div>
+      <div class="hud-stat">
+        <div class="hud-label">Wave</div>
+        <div class="hud-val" id="hudWave">1</div>
+      </div>
+      <div class="hud-stat">
+        <div class="hud-label">Day</div>
+        <div class="hud-val" id="hudDay">1</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="main-grid">
+    <!-- LEFT: ROSTER + LOG -->
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div class="panel">
+        <div class="panel-title">Your Garrison</div>
+        <div id="rosterList">
+          <div class="empty-roster">No defenders yet. Recruit from the Barracks.</div>
+        </div>
+      </div>
+
+      <div class="wave-banner">
+        <div class="wave-text">Next Assault</div>
+        <div class="wave-title" id="nextWaveTitle">Wave 1 of 3</div>
+        <div class="enemy-preview" id="enemyPreview"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Chronicle</div>
+        <div class="log-panel" id="logPanel"></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: SHOP + END DAY -->
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div class="panel">
+        <div class="panel-title">Barracks & Supplies</div>
+        <div id="shopList"></div>
+        <div class="end-day-wrap" style="margin-top:14px;">
+          <button class="end-day-btn" id="endDayBtn" onclick="endDay()">Rest & Face the Night</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// DEFINITIONS
+// ═══════════════════════════════════════════
+
+const TROOP_DEFS = {
+  swordsman: { name:'Swordsman', icon:'⚔️', level:1, cost:2, maxHp:20, hpMin:8, hpMax:12, turnsTilAtk:2, critChance:0, desc:'Reliable frontline fighter.' },
+  archer:    { name:'Archer',    icon:'🏹', level:1, cost:3, maxHp:12, hpMin:6, hpMax:10, turnsTilAtk:3, critChance:0, airCapable:true, desc:'Can target Moths.' },
+  mage:      { name:'Mage',      icon:'🔮', level:2, cost:5, maxHp:10, hpMin:4, hpMax:16, turnsTilAtk:4, critChance:0, airCapable:true, desc:'High variance dmg; targets Moths.' },
+  giant:     { name:'Giant',     icon:'🗿', level:2, cost:5, maxHp:50, hpMin:6, hpMax:6,  turnsTilAtk:6, critChance:0.25, desc:'Massive HP; 25% crit chance.' },
+};
+
+const ENEMY_DEFS = {
+  goblin: { name:'Goblin', icon:'👺', maxHp:11, hpMin:1, hpMax:4, turnsTilAtk:1, critChance:0.25, airOnly:false },
+  moth:   { name:'Moth',   icon:'🦋', maxHp:15, hpMin:3, hpMax:5, turnsTilAtk:3, critChance:0,    airOnly:true  },
+};
+
+// Wave definitions: [{type, count}, ...]
+const WAVES = [
+  [ {type:'goblin', count:2} ],
+  [ {type:'goblin', count:3}, {type:'moth', count:1} ],
+  [ {type:'goblin', count:4}, {type:'moth', count:2} ],
+];
+
+// ═══════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════
+let state = {};
+let battleState = null;
+let battleSpeed = 1;
+let battleTimer = null;
+let battleSkipped = false;
+
+function newGame() {
+  state = {
+    gold: 10,
+    wave: 1,
+    day: 1,
+    troops: [],
+    nextId: 1,
+    battleOver: false,
+    gameOver: false,
+    won: false,
+  };
+  battleSpeed = 1;
+  clearLog();
+  renderAll();
+  showCharacterSelect(true);
+}
+
+// ═══════════════════════════════════════════
+// TROOP CREATION
+// ═══════════════════════════════════════════
+function makeTroop(typeKey) {
+  const def = TROOP_DEFS[typeKey];
+  return {
+    id: state.nextId++,
+    typeKey,
+    name: def.name,
+    icon: def.icon,
+    level: def.level,
+    cost: def.cost,
+    maxHp: def.maxHp,
+    hp: def.maxHp,
+    hpMin: def.hpMin,
+    hpMax: def.hpMax,
+    turnsTilAtk: def.turnsTilAtk,
+    atkTimer: 0,
+    critChance: def.critChance,
+    airCapable: !!def.airCapable,
+    alive: true,
+  };
+}
+
+function makeEnemy(typeKey) {
+  const def = ENEMY_DEFS[typeKey];
+  return {
+    id: state.nextId++,
+    typeKey,
+    name: def.name,
+    icon: def.icon,
+    maxHp: def.maxHp,
+    hp: def.maxHp,
+    hpMin: def.hpMin,
+    hpMax: def.hpMax,
+    turnsTilAtk: def.turnsTilAtk,
+    atkTimer: 0,
+    critChance: def.critChance,
+    airOnly: def.airOnly,
+    alive: true,
+  };
+}
+
+function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+// ═══════════════════════════════════════════
+// CHARACTER SELECTION
+// ═══════════════════════════════════════════
+function generateCharChoices() {
+  const keys = Object.keys(TROOP_DEFS);
+  const lv1 = keys.filter(k => TROOP_DEFS[k].level === 1);
+  const lv2 = keys.filter(k => TROOP_DEFS[k].level === 2);
+  function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+  const c1 = pick(lv1);
+  let c2 = pick(lv1);
+  if (lv1.length > 1) { while (c2 === c1) c2 = pick(lv1); }
+  const c3 = pick(lv2);
+  return [c1, c2, c3];
+}
+
+let charSelectCallback = null;
+
+function showCharacterSelect(isFirst) {
+  const choices = generateCharChoices();
+  const overlay = document.getElementById('charOverlay');
+  const sub = document.getElementById('charSubText');
+  sub.textContent = isFirst
+    ? 'A wanderer arrives at your gate. Recruit one for free.'
+    : 'Choose one recruit to add to your garrison.';
+
+  const opts = document.getElementById('charOptions');
+  opts.innerHTML = '';
+
+  choices.forEach(key => {
+    const def = TROOP_DEFS[key];
+    const card = document.createElement('div');
+    card.className = 'char-card';
+    const lvLabel = def.level === 1
+      ? '<span class="level-badge lv1">Lv 1</span>'
+      : '<span class="level-badge lv2">Lv 2</span>';
+
+    card.innerHTML = `
+      <div class="char-icon">${def.icon}</div>
+      <div class="char-cname">${def.name} ${lvLabel}</div>
+      <div class="char-stat">
+        HP: ${def.maxHp}<br>
+        DMG: ${def.hpMin}–${def.hpMax}<br>
+        Attack every ${def.turnsTilAtk} turn${def.turnsTilAtk > 1 ? 's' : ''}
+        ${def.critChance ? `<br>25% crit` : ''}
+        ${def.airCapable ? `<br>Targets air` : ''}
+      </div>
+      <div class="char-cost">${isFirst ? 'Free' : def.cost + ' Gold'}</div>
+    `;
+    card.onclick = () => {
+      if (!isFirst && state.gold < def.cost) return;
+      if (!isFirst) state.gold -= def.cost;
+      state.troops.push(makeTroop(key));
+      overlay.classList.remove('active');
+      renderAll();
+      if (charSelectCallback) { charSelectCallback(); charSelectCallback = null; }
+    };
+    if (!isFirst && state.gold < def.cost) card.style.opacity = '0.4';
+    opts.appendChild(card);
+  });
+
+  overlay.classList.add('active');
+}
+
+// ═══════════════════════════════════════════
+// SHOP
+// ═══════════════════════════════════════════
+function renderShop() {
+  const list = document.getElementById('shopList');
+  const items = [
+    { key:'swordsman', label:'Recruit Swordsman', desc:`20 HP · 8–12 dmg · Atk every 2t`, cost:2 },
+    { key:'archer',    label:'Recruit Archer',    desc:`12 HP · 6–10 dmg · Atk every 3t · Air`, cost:3 },
+    { key:'mage',      label:'Recruit Mage',      desc:`10 HP · 4–16 dmg · Atk every 4t · Air`, cost:5 },
+    { key:'giant',     label:'Recruit Giant',     desc:`50 HP · 6 dmg · Atk every 6t · 25% crit`, cost:5 },
+  ];
+
+  list.innerHTML = '';
+  items.forEach(item => {
+    const def = TROOP_DEFS[item.key];
+    const canAfford = state.gold >= item.cost;
+    const div = document.createElement('div');
+    div.className = 'shop-item' + (canAfford ? '' : ' disabled');
+    div.innerHTML = `
+      <div class="shop-icon">${def.icon}</div>
+      <div class="shop-info">
+        <div class="shop-name">${item.label}
+          ${def.level===1 ? '<span class="level-badge lv1">Lv1</span>' : '<span class="level-badge lv2">Lv2</span>'}
+        </div>
+        <div class="shop-desc">${item.desc}</div>
+      </div>
+      <button class="buy-btn" ${canAfford ? '' : 'disabled'} onclick="buyTroop('${item.key}')">${item.cost}g</button>
+    `;
+    list.appendChild(div);
+  });
+}
+
+function buyTroop(key) {
+  const def = TROOP_DEFS[key];
+  if (state.gold < def.cost) return;
+  state.gold -= def.cost;
+  state.troops.push(makeTroop(key));
+  log(`Recruited a ${def.name} for ${def.cost}g.`, 'info');
+  renderAll();
+}
+
+// ═══════════════════════════════════════════
+// ROSTER
+// ═══════════════════════════════════════════
+function renderRoster() {
+  const list = document.getElementById('rosterList');
+  if (!state.troops.length) {
+    list.innerHTML = '<div class="empty-roster">No defenders yet. Recruit from the Barracks.</div>';
+    return;
+  }
+  list.innerHTML = '';
+  state.troops.forEach(t => {
+    const pct = Math.max(0, (t.hp / t.maxHp) * 100);
+    const barColor = pct > 50 ? 'var(--green)' : pct > 25 ? 'var(--gold)' : 'var(--blood-bright)';
+    const pips = [];
+    for (let i = 0; i < t.turnsTilAtk; i++) {
+      pips.push(`<div class="attack-pip${i < t.atkTimer ? ' ready' : ''}"></div>`);
+    }
+    const alive = t.hp > 0;
+    const div = document.createElement('div');
+    div.className = 'troop-slot' + (alive ? '' : ' dead');
+    div.innerHTML = `
+      <div class="troop-icon">${t.icon}</div>
+      <div class="troop-info">
+        <div class="troop-name">${t.name}
+          ${t.level===1 ? '<span class="level-badge lv1">Lv1</span>' : '<span class="level-badge lv2">Lv2</span>'}
+        </div>
+        <div class="hp-bar-wrap">
+          <div class="hp-bar" style="width:${pct}%;background:${barColor};"></div>
+        </div>
+        <div class="troop-stats">${t.hp}/${t.maxHp} HP · ${t.hpMin}–${t.hpMax} dmg</div>
+        <div class="attack-pip-row">${pips.join('')}</div>
+      </div>
+      ${alive ? `<button class="remove-troop" onclick="removeTroop(${t.id})" title="Dismiss">✕</button>` : ''}
+    `;
+    list.appendChild(div);
+  });
+}
+
+function removeTroop(id) {
+  state.troops = state.troops.filter(t => t.id !== id);
+  renderAll();
+}
+
+// ═══════════════════════════════════════════
+// WAVE PREVIEW
+// ═══════════════════════════════════════════
+function renderWavePreview() {
+  const title = document.getElementById('nextWaveTitle');
+  const preview = document.getElementById('enemyPreview');
+  if (state.wave > WAVES.length) {
+    title.textContent = 'All waves defeated!';
+    preview.innerHTML = '';
+    return;
+  }
+  title.textContent = `Wave ${state.wave} of ${WAVES.length}`;
+  const wave = WAVES[state.wave - 1];
+  preview.innerHTML = wave.map(g => {
+    const def = ENEMY_DEFS[g.type];
+    return `<div class="enemy-chip">${def.icon} ${g.count}× ${def.name}</div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════
+// RENDER ALL
+// ═══════════════════════════════════════════
+function renderAll() {
+  document.getElementById('hudGold').textContent = state.gold;
+  document.getElementById('hudWave').textContent = state.wave;
+  document.getElementById('hudDay').textContent = state.day;
+  renderRoster();
+  renderShop();
+  renderWavePreview();
+  document.getElementById('endDayBtn').disabled = !!state.gameOver;
+}
+
+// ═══════════════════════════════════════════
+// END DAY / BATTLE
+// ═══════════════════════════════════════════
+function endDay() {
+  if (state.gameOver) return;
+  if (state.wave > WAVES.length) {
+    showFinalVictory(); return;
+  }
+  const aliveTroops = state.troops.filter(t => t.hp > 0);
+  if (!aliveTroops.length) {
+    showResult(false, 'Your garrison fell without a single defender. The darkness claims all.');
+    return;
+  }
+  log(`Night ${state.day} — Wave ${state.wave} begins!`, 'info');
+  startBattle();
+}
+
+// ═══════════════════════════════════════════
+// BATTLE ENGINE
+// ═══════════════════════════════════════════
+function startBattle() {
+  const waveIndex = state.wave - 1;
+  const waveDef = WAVES[waveIndex];
+
+  // Build combatants (deep clone HP for battle without affecting roster perms)
+  const allies = state.troops.filter(t => t.hp > 0).map(t => ({
+    ...t, atkTimer: 0, alive: true, battleHp: t.hp,
+  }));
+
+  const enemies = [];
+  waveDef.forEach(group => {
+    for (let i = 0; i < group.count; i++) enemies.push(makeEnemy(group.type));
+  });
+
+  battleState = {
+    allies, enemies, round: 0, done: false, won: false,
+    log: [],
+  };
+
+  battleSkipped = false;
+  renderBattleFrame();
+  document.getElementById('battleOverlay').classList.add('active');
+  document.getElementById('battleWaveTitle').textContent = `Night Falls — Wave ${state.wave}`;
+
+  setSpeed(1);
+  scheduleTick();
+}
+
+function scheduleTick() {
+  if (battleTimer) clearTimeout(battleTimer);
+  if (battleState.done || battleSkipped) return;
+  const delay = Math.round(700 / battleSpeed);
+  battleTimer = setTimeout(battleTick, delay);
+}
+
+function battleTick() {
+  if (!battleState || battleState.done || battleSkipped) return;
+  battleState.round++;
+  const { allies, enemies } = battleState;
+
+  document.getElementById('battleRound').textContent = `Round ${battleState.round}`;
+
+  const aliveAllies = allies.filter(a => a.alive);
+  const aliveEnemies = enemies.filter(e => e.alive);
+
+  // Allies attack
+  aliveAllies.forEach(ally => {
+    if (!ally.alive) return;
+    ally.atkTimer++;
+    if (ally.atkTimer >= ally.turnsTilAtk) {
+      ally.atkTimer = 0;
+      // Pick target: air-capable can hit any, otherwise can only hit non-airOnly
+      const targets = aliveEnemies.filter(e => e.alive && (ally.airCapable || !e.airOnly));
+      if (!targets.length) return;
+      const target = targets[Math.floor(Math.random() * targets.length)];
+      let dmg = rand(ally.hpMin, ally.hpMax);
+      let isCrit = Math.random() < ally.critChance;
+      if (isCrit) dmg *= 2;
+      target.hp -= dmg;
+      if (target.hp <= 0) { target.hp = 0; target.alive = false; }
+      battleLog(`${ally.icon} ${ally.name} hits ${target.icon} ${target.name} for ${dmg}${isCrit ? ' (CRIT!)' : ''} — ${Math.max(0, target.hp)} HP left`, isCrit ? 'crit' : 'dmg');
+    }
+  });
+
+  // Enemies attack
+  aliveEnemies.forEach(enemy => {
+    if (!enemy.alive) return;
+    enemy.atkTimer++;
+    if (enemy.atkTimer >= enemy.turnsTilAtk) {
+      enemy.atkTimer = 0;
+      // Moths attack air-capable units preferentially, or random ally
+      let targets = aliveAllies.filter(a => a.alive);
+      if (!targets.length) return;
+      const target = targets[Math.floor(Math.random() * targets.length)];
+      let dmg = rand(enemy.hpMin, enemy.hpMax);
+      let isCrit = Math.random() < enemy.critChance;
+      if (isCrit) dmg *= 2;
+      target.battleHp -= dmg;
+      if (target.battleHp <= 0) { target.battleHp = 0; target.alive = false; }
+      battleLog(`${enemy.icon} ${enemy.name} strikes ${target.icon} ${target.name} for ${dmg}${isCrit ? ' (CRIT!)' : ''} — ${Math.max(0, target.battleHp)} HP left`, isCrit ? 'crit' : 'dmg');
+    }
+  });
+
+  // Check end
+  const anyAliveAllies = allies.some(a => a.alive);
+  const anyAliveEnemies = enemies.some(e => e.alive);
+
+  renderBattleUnits();
+
+  if (!anyAliveEnemies) {
+    battleState.done = true; battleState.won = true;
+    battleLog('All enemies defeated!', 'win');
+    setTimeout(() => resolveBattle(true), 800 / battleSpeed);
+    return;
+  }
+  if (!anyAliveAllies) {
+    battleState.done = true; battleState.won = false;
+    battleLog('Your garrison has fallen...', 'lose');
+    setTimeout(() => resolveBattle(false), 800 / battleSpeed);
+    return;
+  }
+
+  scheduleTick();
+}
+
+function resolveBattle(won) {
+  // Apply HP changes back to main roster
+  battleState.allies.forEach(bAlly => {
+    const troop = state.troops.find(t => t.id === bAlly.id);
+    if (troop) { troop.hp = bAlly.battleHp; }
+  });
+
+  document.getElementById('battleOverlay').classList.remove('active');
+
+  if (won) {
+    const goldReward = 2 + state.wave;
+    state.gold += goldReward;
+    log(`Wave ${state.wave} defeated! Earned ${goldReward}g.`, 'win');
+    state.wave++;
+    state.day++;
+    renderAll();
+
+    if (state.wave > WAVES.length) {
+      showFinalVictory();
+    } else {
+      showResult(true, `The horde is driven back. You earned ${goldReward} gold.\n\nPrepare for Wave ${state.wave}...`);
+    }
+  } else {
+    log(`Wave ${state.wave} — the garrison fell. All is lost.`, 'lose');
+    state.gameOver = true;
+    renderAll();
+    showResult(false, 'Your last defender has fallen. The darkness swallows the Bastion.\n\nAll is silence.');
+  }
+}
+
+function skipBattle() {
+  battleSkipped = true;
+  if (battleTimer) clearTimeout(battleTimer);
+
+  const { allies, enemies } = battleState;
+  let round = 0;
+  const MAX = 500;
+
+  while (round < MAX) {
+    round++;
+    const aliveAllies = allies.filter(a => a.alive);
+    const aliveEnemies = enemies.filter(e => e.alive);
+    if (!aliveEnemies.length || !aliveAllies.length) break;
+
+    aliveAllies.forEach(ally => {
+      if (!ally.alive) return;
+      ally.atkTimer++;
+      if (ally.atkTimer >= ally.turnsTilAtk) {
+        ally.atkTimer = 0;
+        const targets = aliveEnemies.filter(e => e.alive && (ally.airCapable || !e.airOnly));
+        if (!targets.length) return;
+        const target = targets[Math.floor(Math.random() * targets.length)];
+        let dmg = rand(ally.hpMin, ally.hpMax);
+        if (Math.random() < ally.critChance) dmg *= 2;
+        target.hp -= dmg;
+        if (target.hp <= 0) { target.hp = 0; target.alive = false; }
+      }
+    });
+
+    aliveEnemies.forEach(enemy => {
+      if (!enemy.alive) return;
+      enemy.atkTimer++;
+      if (enemy.atkTimer >= enemy.turnsTilAtk) {
+        enemy.atkTimer = 0;
+        let targets = aliveAllies.filter(a => a.alive);
+        if (!targets.length) return;
+        const target = targets[Math.floor(Math.random() * targets.length)];
+        let dmg = rand(enemy.hpMin, enemy.hpMax);
+        if (Math.random() < enemy.critChance) dmg *= 2;
+        target.battleHp -= dmg;
+        if (target.battleHp <= 0) { target.battleHp = 0; target.alive = false; }
+      }
+    });
+  }
+
+  const won = enemies.every(e => !e.alive);
+  document.getElementById('battleOverlay').classList.remove('active');
+  resolveBattle(won);
+}
+
+function setSpeed(s) {
+  battleSpeed = s;
+  document.getElementById('speed1Btn').classList.toggle('active', s === 1);
+  document.getElementById('speed2Btn').classList.toggle('active', s === 2);
+  document.getElementById('speed3Btn').classList.toggle('active', s === 4);
+}
+
+// ═══════════════════════════════════════════
+// BATTLE RENDERING
+// ═══════════════════════════════════════════
+function renderBattleFrame() {
+  renderBattleUnits();
+  document.getElementById('battleLog').innerHTML = '';
+}
+
+function renderBattleUnits() {
+  if (!battleState) return;
+  const alliesEl = document.getElementById('battleAllies');
+  const enemiesEl = document.getElementById('battleEnemies');
+
+  alliesEl.innerHTML = '';
+  battleState.allies.forEach(a => {
+    const pct = Math.max(0, (a.battleHp / a.maxHp) * 100);
+    const barColor = pct > 50 ? 'var(--green)' : pct > 25 ? 'var(--gold)' : 'var(--blood-bright)';
+    const div = document.createElement('div');
+    div.className = 'battle-unit' + (!a.alive ? ' dead' : '');
+    div.innerHTML = `
+      <div class="battle-unit-name">${a.icon} ${a.name}</div>
+      <div style="background:var(--stone-mid);border-radius:2px;height:4px;margin-top:4px;">
+        <div style="width:${pct}%;height:4px;border-radius:2px;background:${barColor};transition:width 0.2s;"></div>
+      </div>
+      <div style="font-size:0.6rem;color:var(--parchment-dim);margin-top:2px;">${a.battleHp}/${a.maxHp} HP</div>
+    `;
+    alliesEl.appendChild(div);
+  });
+
+  enemiesEl.innerHTML = '';
+  battleState.enemies.forEach(e => {
+    const pct = Math.max(0, (e.hp / e.maxHp) * 100);
+    const barColor = pct > 50 ? 'var(--blood-bright)' : 'var(--gold)';
+    const div = document.createElement('div');
+    div.className = 'battle-unit' + (!e.alive ? ' dead' : '');
+    div.innerHTML = `
+      <div class="battle-unit-name">${e.icon} ${e.name}${e.airOnly ? ' <span style="font-size:0.55rem;color:var(--ice);">[air]</span>' : ''}</div>
+      <div style="background:var(--stone-mid);border-radius:2px;height:4px;margin-top:4px;">
+        <div style="width:${pct}%;height:4px;border-radius:2px;background:${barColor};transition:width 0.2s;"></div>
+      </div>
+      <div style="font-size:0.6rem;color:var(--parchment-dim);margin-top:2px;">${e.hp}/${e.maxHp} HP</div>
+    `;
+    enemiesEl.appendChild(div);
+  });
+}
+
+function battleLog(msg, cls) {
+  const wrap = document.getElementById('battleLog');
+  const entry = document.createElement('div');
+  entry.className = 'log-entry' + (cls ? ' ' + cls : '');
+  entry.textContent = `› ${msg}`;
+  wrap.insertBefore(entry, wrap.firstChild);
+}
+
+// ═══════════════════════════════════════════
+// RESULT
+// ═══════════════════════════════════════════
+function showResult(won, msg) {
+  const overlay = document.getElementById('resultOverlay');
+  const title = document.getElementById('resultTitle');
+  const msgEl = document.getElementById('resultMsg');
+  const btns = document.getElementById('resultButtons');
+
+  title.textContent = won ? 'Victory' : 'Defeat';
+  title.className = 'result-title ' + (won ? 'win' : 'lose');
+  msgEl.textContent = msg;
+
+  btns.innerHTML = '';
+  if (won && state.wave <= WAVES.length) {
+    const cont = document.createElement('button');
+    cont.className = 'result-btn';
+    cont.textContent = 'Continue to Day ' + state.day;
+    cont.onclick = () => {
+      overlay.classList.remove('active');
+      renderAll();
+    };
+    btns.appendChild(cont);
+  } else if (!won) {
+    const restart = document.createElement('button');
+    restart.className = 'result-btn';
+    restart.textContent = 'Start Again';
+    restart.onclick = () => { overlay.classList.remove('active'); newGame(); };
+    btns.appendChild(restart);
+  }
+
+  overlay.classList.add('active');
+}
+
+function showFinalVictory() {
+  state.gameOver = true;
+  renderAll();
+  const overlay = document.getElementById('resultOverlay');
+  const title = document.getElementById('resultTitle');
+  const msgEl = document.getElementById('resultMsg');
+  const btns = document.getElementById('resultButtons');
+  title.textContent = 'The Bastion Holds';
+  title.className = 'result-title win';
+  msgEl.textContent = 'Three nights of darkness endured. Three waves of horror repelled. The horde retreats into shadow, and the Bastion stands — battered, bloodied, but unbroken.\n\nYou have won.';
+  btns.innerHTML = '<button class="result-btn" onclick="document.getElementById(\'resultOverlay\').classList.remove(\'active\'); newGame();">Play Again</button>';
+  overlay.classList.add('active');
+}
+
+// ═══════════════════════════════════════════
+// LOG
+// ═══════════════════════════════════════════
+function log(msg, cls) {
+  const panel = document.getElementById('logPanel');
+  const entry = document.createElement('div');
+  entry.className = 'log-entry' + (cls ? ' ' + cls : '');
+  entry.textContent = `› Day ${state.day} — ${msg}`;
+  panel.insertBefore(entry, panel.firstChild);
+}
+
+function clearLog() { document.getElementById('logPanel').innerHTML = ''; }
+
+// ═══════════════════════════════════════════
+// BOOT
+// ═══════════════════════════════════════════
+function startGame() {
+  document.getElementById('introOverlay').style.opacity = '0';
+  document.getElementById('introOverlay').style.pointerEvents = 'none';
+  setTimeout(() => { document.getElementById('introOverlay').style.display = 'none'; }, 500);
+  newGame();
+}
+</script>
+</body>
+</html>
