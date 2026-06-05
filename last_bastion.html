@@ -5,25 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Last Bastion</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;600;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&display=swap');
 
   :root {
     --stone: #1a1a1e;
     --stone-light: #252530;
     --stone-mid: #38384a;
-    --stone-border: #4a4a60;
+    --stone-border: #5a5a75;
     --gold: #d4a83a;
-    --gold-bright: #f0c855;
-    --gold-dim: #7a601a;
-    --parchment: #e8dcc8;
-    --parchment-dim: #a89878;
+    --gold-bright: #fcd568;
+    --gold-dim: #a68427;
+    --parchment: #f4ebd8; 
+    --parchment-dim: #c8bba8; 
     --blood: #8b1a1a;
-    --blood-bright: #cc3333;
+    --blood-bright: #ff4d4d;
     --ice: #4ac8d8;
     --teal: #2aa890;
-    --purple: #8855cc;
-    --green: #55aa44;
-    --fog: rgba(200,190,170,0.06);
+    --purple: #a673f0;
+    --green: #66cc55;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -31,214 +30,209 @@
   body {
     background: var(--stone);
     color: var(--parchment);
-    font-family: 'IM Fell English', Georgia, serif;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 16px; 
     min-height: 100vh;
     overflow-x: hidden;
+    line-height: 1.5;
   }
 
   body::before {
     content: '';
     position: fixed; inset: 0;
     background-image:
-      repeating-linear-gradient(0deg, rgba(255,255,255,0.01) 0px, transparent 1px, transparent 40px),
-      repeating-linear-gradient(90deg, rgba(255,255,255,0.01) 0px, transparent 1px, transparent 40px);
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.02) 0px, transparent 1px, transparent 40px),
+      repeating-linear-gradient(90deg, rgba(255,255,255,0.02) 0px, transparent 1px, transparent 40px);
     pointer-events: none; z-index: 0;
   }
 
   .wrapper {
     position: relative; z-index: 1;
     max-width: 1100px; margin: 0 auto;
-    padding: 14px 18px 40px;
-    display: flex; flex-direction: column; gap: 12px;
+    padding: 20px 20px 60px;
+    display: flex; flex-direction: column; gap: 20px;
   }
 
   header {
     display: flex; align-items: center; justify-content: space-between;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--stone-border);
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--stone-border);
   }
 
   h1 {
-    font-family: 'Cinzel', serif; font-size: 1.7rem; font-weight: 900;
+    font-family: 'Cinzel', serif; font-size: 2rem; font-weight: 900;
     color: var(--gold-bright);
     text-shadow: 0 0 40px rgba(212,168,58,0.5), 0 2px 6px rgba(0,0,0,0.9);
     letter-spacing: 0.12em;
   }
 
-  .subtitle { font-style: italic; color: var(--parchment-dim); font-size: 0.78rem; letter-spacing: 0.06em; margin-top: 2px; }
+  .subtitle { font-weight: 600; color: var(--parchment-dim); font-size: 1rem; letter-spacing: 0.05em; margin-top: 4px; }
 
-  .hud {
-    display: flex; gap: 10px;
-    align-items: center;
-  }
+  .hud { display: flex; gap: 16px; align-items: center; }
 
   .hud-stat {
     background: var(--stone-light);
-    border: 1px solid var(--stone-border);
-    border-top: 2px solid var(--gold-dim);
-    border-radius: 3px;
-    padding: 5px 14px;
+    border: 2px solid var(--stone-border);
+    border-top: 4px solid var(--gold-dim);
+    border-radius: 6px;
+    padding: 8px 16px;
     text-align: center;
-    min-width: 80px;
+    min-width: 90px;
   }
 
-  .hud-label { font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.18em; color: var(--parchment-dim); }
-  .hud-val { font-family: 'Cinzel', serif; font-size: 1.1rem; color: var(--gold-bright); }
+  .hud-label { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--parchment-dim); }
+  .hud-val { font-family: 'Cinzel', serif; font-size: 1.4rem; font-weight: bold; color: var(--gold-bright); }
 
   .main-grid {
     display: grid;
-    grid-template-columns: 1fr 340px;
-    gap: 14px;
+    grid-template-columns: 1fr 380px;
+    gap: 20px;
   }
 
   .panel {
     background: var(--stone-light);
-    border: 1px solid var(--stone-border);
-    border-radius: 4px;
-    padding: 14px;
+    border: 2px solid var(--stone-border);
+    border-radius: 6px;
+    padding: 20px;
   }
 
   .panel-title {
-    font-family: 'Cinzel', serif; font-size: 0.75rem;
-    letter-spacing: 0.2em; text-transform: uppercase;
-    color: var(--gold-dim);
-    border-bottom: 1px solid var(--stone-border);
-    padding-bottom: 8px; margin-bottom: 12px;
+    font-family: 'Cinzel', serif; font-size: 1.1rem; font-weight: bold;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--gold-bright);
+    border-bottom: 2px solid var(--stone-border);
+    padding-bottom: 12px; margin-bottom: 16px;
   }
 
   /* TROOP ROSTER */
   .troop-slot {
-    display: flex; align-items: center; gap: 10px;
+    display: flex; align-items: center; gap: 16px;
     background: var(--stone);
-    border: 1px solid var(--stone-border);
-    border-radius: 4px;
-    padding: 8px 12px;
-    margin-bottom: 6px;
+    border: 2px solid var(--stone-border);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
     position: relative;
     transition: border-color 0.2s;
   }
 
-  .troop-slot.dead { opacity: 0.4; border-color: var(--blood); }
-  .troop-slot.active-attacker { border-color: var(--gold); }
-
-  .troop-icon {
-    font-size: 1.4rem; width: 34px; text-align: center; flex-shrink: 0;
-  }
-
+  .troop-slot.dead { opacity: 0.6; border-color: var(--blood); }
+  .troop-icon { font-size: 1.8rem; width: 44px; text-align: center; flex-shrink: 0; }
   .troop-info { flex: 1; }
-  .troop-name { font-family: 'Cinzel', serif; font-size: 0.78rem; color: var(--gold-bright); }
-  .troop-class { font-size: 0.65rem; color: var(--parchment-dim); font-style: italic; }
+  .troop-name { font-weight: bold; font-size: 1rem; color: var(--gold-bright); margin-bottom: 4px; }
+  
+  .hp-bar-wrap { margin-top: 6px; background: var(--stone-mid); border-radius: 4px; height: 10px; }
+  .hp-bar { height: 10px; border-radius: 4px; background: var(--green); transition: width 0.3s; }
 
-  .hp-bar-wrap { margin-top: 4px; background: var(--stone-mid); border-radius: 2px; height: 5px; }
-  .hp-bar { height: 5px; border-radius: 2px; background: var(--green); transition: width 0.3s; }
+  .troop-stats { font-size: 0.85rem; font-weight: 600; color: var(--parchment-dim); margin-top: 6px; }
 
-  .troop-stats { font-size: 0.65rem; color: var(--parchment-dim); margin-top: 2px; }
-
-  .attack-pip-row { display: flex; gap: 3px; margin-top: 4px; }
-  .attack-pip { width: 10px; height: 10px; border-radius: 50%; background: var(--stone-mid); border: 1px solid var(--stone-border); }
+  .attack-pip-row { display: flex; gap: 6px; margin-top: 8px; }
+  .attack-pip { width: 14px; height: 14px; border-radius: 50%; background: var(--stone-mid); border: 2px solid var(--stone-border); }
   .attack-pip.ready { background: var(--gold); border-color: var(--gold-bright); }
 
-  .remove-troop {
-    background: none; border: none; color: var(--blood-bright);
-    cursor: pointer; font-size: 1rem; padding: 4px;
-    opacity: 0.6; transition: opacity 0.15s;
-    font-family: serif;
+  /* Touch targets minimum 44px height */
+  .buy-btn, .remove-troop, .speed-btn, .skip-btn, .result-btn {
+    min-height: 44px;
+    padding: 10px 16px;
+    cursor: pointer;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
-  .remove-troop:hover { opacity: 1; }
+
+  .remove-troop {
+    background: rgba(255, 77, 77, 0.1); border: 2px solid var(--blood-bright); color: var(--blood-bright);
+    transition: background 0.15s;
+  }
+  .remove-troop:hover { background: rgba(255, 77, 77, 0.2); }
 
   .empty-roster {
     text-align: center; color: var(--parchment-dim);
-    font-style: italic; font-size: 0.85rem;
-    padding: 24px 0;
+    font-weight: 600; font-size: 1rem;
+    padding: 30px 0;
   }
 
   /* LOG */
   .log-panel {
-    height: 140px; overflow-y: auto;
+    height: 180px; overflow-y: auto;
     background: var(--stone);
-    border: 1px solid var(--stone-border);
-    border-radius: 3px; padding: 8px 10px;
-    margin-top: 10px;
+    border: 2px solid var(--stone-border);
+    border-radius: 6px; padding: 12px 16px;
+    margin-top: 16px;
   }
 
   .log-entry {
-    font-size: 0.72rem; color: var(--parchment-dim);
-    padding: 2px 0; border-bottom: 1px solid rgba(255,255,255,0.03);
-    line-height: 1.4;
+    font-size: 0.9rem; font-weight: 500; color: var(--parchment-dim);
+    padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
   }
   .log-entry.dmg { color: var(--blood-bright); }
   .log-entry.heal { color: var(--green); }
-  .log-entry.crit { color: var(--gold-bright); font-style: italic; }
+  .log-entry.crit { color: var(--gold-bright); font-weight: bold; }
   .log-entry.info { color: var(--ice); }
-  .log-entry.win { color: var(--green); font-family: 'Cinzel', serif; }
-  .log-entry.lose { color: var(--blood-bright); font-family: 'Cinzel', serif; }
+  .log-entry.warn { color: var(--gold); font-weight: bold; }
+  .log-entry.win { color: var(--green); font-weight: bold; }
+  .log-entry.lose { color: var(--blood-bright); font-weight: bold; }
 
   /* SHOP PANEL */
   .shop-item {
     background: var(--stone);
-    border: 1px solid var(--stone-border);
-    border-radius: 4px; padding: 8px 10px;
-    margin-bottom: 6px; display: flex;
-    align-items: center; gap: 10px;
+    border: 2px solid var(--stone-border);
+    border-radius: 6px; padding: 12px 16px;
+    margin-bottom: 10px; display: flex;
+    align-items: center; gap: 16px;
     transition: border-color 0.2s;
   }
   .shop-item:hover:not(.disabled) { border-color: var(--gold-dim); }
 
-  .shop-icon { font-size: 1.3rem; width: 30px; text-align: center; flex-shrink: 0; }
+  .shop-icon { font-size: 1.8rem; width: 40px; text-align: center; flex-shrink: 0; }
   .shop-info { flex: 1; }
-  .shop-name { font-family: 'Cinzel', serif; font-size: 0.75rem; color: var(--parchment); }
-  .shop-desc { font-size: 0.62rem; color: var(--parchment-dim); margin-top: 1px; }
+  .shop-name { font-weight: bold; font-size: 0.95rem; color: var(--parchment); }
+  .shop-desc { font-size: 0.85rem; color: var(--parchment-dim); margin-top: 4px; line-height: 1.3; }
 
   .buy-btn {
     background: var(--stone-light);
-    border: 1px solid var(--gold-dim);
+    border: 2px solid var(--gold-dim);
     color: var(--gold-bright);
-    font-family: 'Cinzel', serif; font-size: 0.68rem;
-    padding: 5px 10px; border-radius: 3px;
-    cursor: pointer; white-space: nowrap;
+    white-space: nowrap;
     transition: background 0.15s, border-color 0.15s;
-    letter-spacing: 0.05em;
   }
-  .buy-btn:hover:not(:disabled) { background: rgba(212,168,58,0.12); border-color: var(--gold-bright); }
-  .buy-btn:disabled { opacity: 0.35; cursor: not-allowed; border-color: var(--stone-border); color: var(--parchment-dim); }
-
-  .cost-badge {
-    font-size: 0.62rem; color: var(--gold);
-    display: block; margin-top: 2px;
-  }
+  .buy-btn:hover:not(:disabled) { background: rgba(212,168,58,0.15); border-color: var(--gold-bright); }
+  .buy-btn:disabled { opacity: 0.4; cursor: not-allowed; border-color: var(--stone-border); color: var(--parchment-dim); }
 
   /* END DAY BUTTON */
-  .end-day-wrap { text-align: center; margin-top: 10px; }
+  .end-day-wrap { text-align: center; margin-top: 16px; }
 
   .end-day-btn {
-    background: linear-gradient(180deg, var(--blood) 0%, #5a0f0f 100%);
-    border: 1px solid var(--blood-bright); border-radius: 4px;
+    background: linear-gradient(180deg, var(--blood) 0%, #7a1515 100%);
+    border: 2px solid var(--blood-bright); border-radius: 6px;
     color: var(--parchment); font-family: 'Cinzel', serif;
-    font-size: 0.85rem; font-weight: 600; letter-spacing: 0.12em;
-    padding: 10px 32px; cursor: pointer;
-    text-transform: uppercase;
+    font-size: 1.1rem; font-weight: 900; letter-spacing: 0.1em;
+    min-height: 54px; width: 100%;
+    cursor: pointer; text-transform: uppercase;
     transition: filter 0.15s;
-    width: 100%;
   }
-  .end-day-btn:hover:not(:disabled) { filter: brightness(1.25); }
-  .end-day-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .end-day-btn:hover:not(:disabled) { filter: brightness(1.2); }
+  .end-day-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
   /* BATTLE OVERLAY */
   .battle-overlay {
     position: fixed; inset: 0;
-    background: rgba(0,0,0,0.82);
+    background: rgba(0,0,0,0.9);
     z-index: 100;
     display: flex; align-items: center; justify-content: center;
     opacity: 0; pointer-events: none;
-    transition: opacity 0.35s;
+    transition: opacity 0.3s;
   }
   .battle-overlay.active { opacity: 1; pointer-events: all; }
 
   .battle-frame {
     background: var(--stone-light);
-    border: 2px solid var(--stone-border);
-    border-radius: 6px;
-    width: 680px; max-width: 95vw;
+    border: 3px solid var(--stone-border);
+    border-radius: 8px;
+    width: 800px; max-width: 95vw;
     max-height: 90vh;
     display: flex; flex-direction: column;
     overflow: hidden;
@@ -246,223 +240,163 @@
 
   .battle-header {
     background: var(--stone);
-    border-bottom: 1px solid var(--stone-border);
-    padding: 12px 18px;
+    border-bottom: 2px solid var(--stone-border);
+    padding: 16px 20px;
     display: flex; align-items: center; justify-content: space-between;
   }
 
-  .battle-title {
-    font-family: 'Cinzel', serif; font-size: 1.1rem; font-weight: 900;
-    color: var(--gold-bright); letter-spacing: 0.12em;
-  }
+  .battle-title { font-family: 'Cinzel', serif; font-size: 1.3rem; font-weight: 900; color: var(--gold-bright); letter-spacing: 0.1em; }
 
   .battle-body { display: flex; gap: 0; flex: 1; overflow: hidden; }
-
-  .battle-side {
-    flex: 1; padding: 14px;
-    display: flex; flex-direction: column; gap: 6px;
-    overflow-y: auto;
-  }
-
-  .battle-side.allies { border-right: 1px solid var(--stone-border); }
+  .battle-side { flex: 1; padding: 20px; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; }
+  .battle-side.allies { border-right: 2px solid var(--stone-border); }
 
   .battle-side-title {
-    font-family: 'Cinzel', serif; font-size: 0.65rem;
-    letter-spacing: 0.2em; text-transform: uppercase;
-    color: var(--parchment-dim); margin-bottom: 4px;
+    font-weight: bold; font-size: 0.9rem; letter-spacing: 0.1em; 
+    text-transform: uppercase; color: var(--parchment-dim); margin-bottom: 8px;
   }
 
   .battle-unit {
     background: var(--stone);
-    border: 1px solid var(--stone-border);
-    border-radius: 3px; padding: 6px 10px;
-    font-size: 0.7rem;
-    transition: border-color 0.2s, background 0.2s;
+    border: 2px solid var(--stone-border);
+    border-radius: 6px; padding: 12px;
+    font-size: 0.95rem; font-weight: 500;
   }
+  .battle-unit.dead { opacity: 0.5; border-style: dashed; border-color: var(--stone-border); }
 
-  .battle-unit.attacking { border-color: var(--gold); background: rgba(212,168,58,0.08); }
-  .battle-unit.hit { border-color: var(--blood-bright); background: rgba(180,30,30,0.12); }
-  .battle-unit.dead { opacity: 0.3; border-style: dashed; }
-
-  .battle-unit-name { font-family: 'Cinzel', serif; font-size: 0.68rem; color: var(--parchment); }
+  .battle-unit-name { font-weight: bold; color: var(--parchment); }
 
   .battle-log-wrap {
-    border-top: 1px solid var(--stone-border);
-    padding: 8px 14px;
-    max-height: 150px; overflow-y: auto;
+    border-top: 2px solid var(--stone-border);
+    padding: 12px 20px;
+    max-height: 200px; overflow-y: auto;
     background: var(--stone);
-    flex-shrink: 0;
   }
 
   .battle-footer {
-    padding: 10px 14px;
-    border-top: 1px solid var(--stone-border);
-    display: flex; gap: 10px; align-items: center;
+    padding: 16px 20px;
+    border-top: 2px solid var(--stone-border);
+    display: flex; gap: 16px; align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
   }
 
-  .speed-btn {
-    background: var(--stone); border: 1px solid var(--stone-border);
-    color: var(--parchment-dim); font-size: 0.7rem;
-    padding: 4px 12px; border-radius: 3px; cursor: pointer;
-    font-family: 'Cinzel', serif; transition: border-color 0.15s;
-  }
+  .speed-btn { background: var(--stone); border: 2px solid var(--stone-border); color: var(--parchment-dim); }
   .speed-btn:hover { border-color: var(--gold-dim); }
-  .speed-btn.active { border-color: var(--gold); color: var(--gold-bright); }
+  .speed-btn.active { border-color: var(--gold); color: var(--gold-bright); background: rgba(212,168,58,0.1); }
 
-  .skip-btn {
-    background: var(--stone-light); border: 1px solid var(--stone-border);
-    color: var(--parchment-dim); font-size: 0.72rem;
-    padding: 5px 14px; border-radius: 3px; cursor: pointer;
-    font-family: 'Cinzel', serif; transition: border-color 0.15s;
-  }
-  .skip-btn:hover { border-color: var(--gold-dim); color: var(--parchment); }
+  .skip-btn { background: var(--stone-light); border: 2px solid var(--stone-border); color: var(--parchment); }
+  .skip-btn:hover { border-color: var(--gold-bright); }
 
   /* RESULT OVERLAY */
   .result-overlay {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.88);
-    z-index: 200;
+    position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 200;
     display: flex; align-items: center; justify-content: center;
-    opacity: 0; pointer-events: none;
-    transition: opacity 0.4s;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s;
   }
   .result-overlay.active { opacity: 1; pointer-events: all; }
 
   .result-box {
-    background: var(--stone-light);
-    border: 2px solid var(--stone-border);
-    border-radius: 6px;
-    padding: 32px 44px;
-    text-align: center;
-    max-width: 400px;
+    background: var(--stone-light); border: 3px solid var(--stone-border);
+    border-radius: 8px; padding: 40px; text-align: center; max-width: 500px;
   }
 
-  .result-title {
-    font-family: 'Cinzel', serif; font-size: 2rem; font-weight: 900;
-    letter-spacing: 0.14em; margin-bottom: 10px;
-  }
+  .result-title { font-family: 'Cinzel', serif; font-size: 2.2rem; font-weight: 900; letter-spacing: 0.1em; margin-bottom: 16px; }
   .result-title.win { color: var(--gold-bright); }
   .result-title.lose { color: var(--blood-bright); }
 
-  .result-msg { font-style: italic; color: var(--parchment-dim); font-size: 0.9rem; margin-bottom: 24px; line-height: 1.6; }
+  .result-msg { font-style: italic; color: var(--parchment-dim); font-size: 1.1rem; margin-bottom: 30px; line-height: 1.6; white-space: pre-wrap; }
 
   .result-btn {
-    background: var(--stone); border: 1px solid var(--gold-dim);
-    color: var(--gold-bright); font-family: 'Cinzel', serif;
-    font-size: 0.78rem; letter-spacing: 0.1em;
-    padding: 9px 24px; border-radius: 3px;
-    cursor: pointer; margin: 4px;
-    transition: background 0.15s;
+    background: var(--stone); border: 2px solid var(--gold-dim);
+    color: var(--gold-bright); font-size: 1rem;
+    margin: 6px; transition: background 0.15s;
   }
-  .result-btn:hover { background: rgba(212,168,58,0.12); border-color: var(--gold-bright); }
+  .result-btn:hover { background: rgba(212,168,58,0.2); border-color: var(--gold-bright); }
 
   /* CHARACTER SELECTION */
   .char-overlay {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.9);
-    z-index: 300;
+    position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 300;
     display: flex; align-items: center; justify-content: center;
-    opacity: 0; pointer-events: none;
-    transition: opacity 0.35s;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s;
   }
   .char-overlay.active { opacity: 1; pointer-events: all; }
 
   .char-frame {
-    background: var(--stone-light);
-    border: 2px solid var(--stone-border);
-    border-radius: 6px;
-    padding: 28px 32px;
-    max-width: 620px; width: 95vw;
+    background: var(--stone-light); border: 3px solid var(--stone-border);
+    border-radius: 8px; padding: 36px; max-width: 700px; width: 95vw;
   }
 
   .char-frame-title {
-    font-family: 'Cinzel', serif; font-size: 1.2rem; font-weight: 900;
-    color: var(--gold-bright); text-align: center;
-    letter-spacing: 0.12em; margin-bottom: 6px;
+    font-family: 'Cinzel', serif; font-size: 1.6rem; font-weight: 900;
+    color: var(--gold-bright); text-align: center; letter-spacing: 0.1em; margin-bottom: 10px;
   }
-  .char-frame-sub { text-align: center; color: var(--parchment-dim); font-style: italic; font-size: 0.82rem; margin-bottom: 20px; }
+  .char-frame-sub { text-align: center; color: var(--parchment-dim); font-size: 1rem; margin-bottom: 24px; font-weight: 500; }
 
-  .char-options { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+  .char-options { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
 
   .char-card {
-    background: var(--stone);
-    border: 1px solid var(--stone-border);
-    border-radius: 5px; padding: 16px;
-    flex: 1; min-width: 160px; max-width: 200px;
-    cursor: pointer; transition: border-color 0.2s, transform 0.15s;
-    text-align: center;
+    background: var(--stone); border: 2px solid var(--stone-border);
+    border-radius: 8px; padding: 20px; flex: 1; min-width: 180px; max-width: 220px;
+    cursor: pointer; transition: border-color 0.2s, transform 0.15s; text-align: center;
   }
-  .char-card:hover { border-color: var(--gold); transform: translateY(-2px); }
-  .char-card .char-icon { font-size: 2.2rem; margin-bottom: 8px; }
-  .char-card .char-cname { font-family: 'Cinzel', serif; font-size: 0.8rem; color: var(--gold-bright); margin-bottom: 4px; }
-  .char-card .char-level { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--parchment-dim); margin-bottom: 8px; }
-  .char-card .char-stat { font-size: 0.65rem; color: var(--parchment-dim); line-height: 1.7; }
-  .char-card .char-cost { font-family: 'Cinzel', serif; font-size: 0.72rem; color: var(--gold); margin-top: 10px; }
+  .char-card:hover { border-color: var(--gold-bright); transform: translateY(-3px); }
+  .char-card .char-icon { font-size: 2.8rem; margin-bottom: 12px; }
+  .char-card .char-cname { font-weight: bold; font-size: 1.1rem; color: var(--gold-bright); margin-bottom: 8px; }
+  .char-card .char-stat { font-size: 0.9rem; color: var(--parchment-dim); line-height: 1.6; }
+  .char-card .char-cost { font-weight: bold; font-size: 1.1rem; color: var(--gold); margin-top: 16px; }
 
   /* WAVE BANNER */
   .wave-banner {
-    text-align: center;
-    padding: 7px;
-    background: var(--stone);
-    border: 1px solid var(--stone-border);
-    border-radius: 3px;
+    text-align: center; padding: 12px; background: var(--stone);
+    border: 2px solid var(--stone-border); border-radius: 6px;
   }
 
-  .wave-text { font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.15em; color: var(--parchment-dim); }
-  .wave-title { font-family: 'Cinzel', serif; font-size: 1rem; color: var(--gold); letter-spacing: 0.1em; }
+  .wave-text { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--parchment-dim); }
+  .wave-title { font-weight: bold; font-size: 1.2rem; color: var(--gold); margin: 6px 0; }
 
-  .enemy-preview { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; justify-content: center; }
+  .enemy-preview { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
   .enemy-chip {
-    background: rgba(139,26,26,0.18); border: 1px solid var(--blood);
-    border-radius: 3px; padding: 2px 8px;
-    font-size: 0.65rem; color: var(--parchment-dim);
-    font-family: 'Cinzel', serif;
+    background: rgba(139,26,26,0.18); border: 2px solid var(--blood);
+    border-radius: 4px; padding: 6px 10px; font-size: 0.85rem; font-weight: 600;
+    color: var(--parchment);
   }
 
   /* INTRO */
   .intro-overlay {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.96);
-    z-index: 400;
-    display: flex; align-items: center; justify-content: center;
-    transition: opacity 0.5s;
+    position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 400;
+    display: flex; align-items: center; justify-content: center; transition: opacity 0.4s;
   }
-  .intro-box {
-    max-width: 520px; text-align: center; padding: 40px 32px;
-  }
+  .intro-box { max-width: 600px; text-align: center; padding: 40px; }
   .intro-title {
-    font-family: 'Cinzel', serif; font-size: 2.4rem; font-weight: 900;
-    color: var(--gold-bright); letter-spacing: 0.14em;
-    margin-bottom: 10px;
-    text-shadow: 0 0 60px rgba(212,168,58,0.4);
+    font-family: 'Cinzel', serif; font-size: 3rem; font-weight: 900;
+    color: var(--gold-bright); letter-spacing: 0.1em; margin-bottom: 20px;
+    text-shadow: 0 0 60px rgba(212,168,58,0.5);
   }
-  .intro-sub { font-style: italic; color: var(--parchment-dim); font-size: 0.95rem; line-height: 1.7; margin-bottom: 28px; }
+  .intro-sub { color: var(--parchment-dim); font-size: 1.2rem; line-height: 1.7; margin-bottom: 40px; }
   .intro-start {
-    background: rgba(212,168,58,0.1); border: 1px solid var(--gold);
-    color: var(--gold-bright); font-family: 'Cinzel', serif;
-    font-size: 0.9rem; letter-spacing: 0.15em; padding: 12px 36px;
-    border-radius: 3px; cursor: pointer; transition: background 0.2s;
+    background: rgba(212,168,58,0.15); border: 2px solid var(--gold);
+    color: var(--gold-bright); font-size: 1.2rem; font-weight: bold; letter-spacing: 0.1em; 
+    padding: 16px 40px; border-radius: 6px; cursor: pointer; transition: background 0.2s;
+    min-height: 54px;
   }
-  .intro-start:hover { background: rgba(212,168,58,0.2); }
+  .intro-start:hover { background: rgba(212,168,58,0.3); }
 
   .gold-text { color: var(--gold-bright); }
   .level-badge {
-    font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.15em;
-    padding: 1px 6px; border-radius: 2px; font-family: 'Cinzel', serif;
-    margin-left: 6px;
+    font-size: 0.75rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.1em;
+    padding: 2px 8px; border-radius: 4px; margin-left: 8px;
   }
-  .lv1 { background: rgba(85,170,68,0.18); color: var(--green); border: 1px solid var(--green); }
-  .lv2 { background: rgba(136,85,204,0.18); color: var(--purple); border: 1px solid var(--purple); }
+  .lv1 { background: rgba(102, 204, 85, 0.2); color: var(--green); border: 2px solid var(--green); }
+  .lv2 { background: rgba(166, 115, 240, 0.2); color: var(--purple); border: 2px solid var(--purple); }
 
-  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar { width: 8px; }
   ::-webkit-scrollbar-track { background: var(--stone); }
-  ::-webkit-scrollbar-thumb { background: var(--stone-border); border-radius: 2px; }
+  ::-webkit-scrollbar-thumb { background: var(--stone-border); border-radius: 4px; }
 </style>
 </head>
 <body>
 
-<!-- INTRO -->
 <div class="intro-overlay" id="introOverlay">
   <div class="intro-box">
     <div class="intro-title">THE LAST BASTION</div>
@@ -475,7 +409,6 @@
   </div>
 </div>
 
-<!-- CHARACTER SELECTION -->
 <div class="char-overlay" id="charOverlay">
   <div class="char-frame">
     <div class="char-frame-title">Choose Your Fighter</div>
@@ -484,12 +417,11 @@
   </div>
 </div>
 
-<!-- BATTLE OVERLAY -->
 <div class="battle-overlay" id="battleOverlay">
   <div class="battle-frame">
     <div class="battle-header">
       <div class="battle-title" id="battleWaveTitle">Night Falls — Wave 1</div>
-      <div style="font-size:0.7rem; color:var(--parchment-dim); font-style:italic;" id="battleRound">Round 1</div>
+      <div style="font-size:1rem; font-weight:bold; color:var(--parchment-dim);" id="battleRound">Round 1</div>
     </div>
     <div class="battle-body">
       <div class="battle-side allies">
@@ -505,34 +437,23 @@
       <div id="battleLog"></div>
     </div>
     <div class="battle-footer">
-      <div style="display:flex;gap:6px;">
+      <div style="display:flex;gap:10px;">
         <button class="speed-btn active" id="speed1Btn" onclick="setSpeed(1)">1×</button>
         <button class="speed-btn" id="speed2Btn" onclick="setSpeed(2)">2×</button>
         <button class="speed-btn" id="speed3Btn" onclick="setSpeed(4)">4×</button>
       </div>
-      <div style="display:flex;gap:6px;">
+      <div style="display:flex;gap:10px;">
         <button class="skip-btn" id="skipBattleBtn" onclick="skipBattle()">Skip Battle</button>
-        <button class="skip-btn" id="nextDayBtn" onclick="proceedNextDay()" style="display:none;background:linear-gradient(180deg, var(--gold-dim) 0%, #3d2f0f 100%);border-color:var(--gold);">Continue</button>
+        <button class="skip-btn" id="nextDayBtn" onclick="handleContinueClick()" style="display:none;background:var(--gold-dim);border-color:var(--gold-bright);color:var(--stone);">Continue</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- RESULT OVERLAY -->
-<div class="result-overlay" id="resultOverlay">
-  <div class="result-box">
-    <div class="result-title" id="resultTitle">Victory</div>
-    <div class="result-msg" id="resultMsg"></div>
-    <div id="resultButtons"></div>
-  </div>
+<div class="modal-overlay" id="modal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:1000;align-items:center;justify-content:center;">
+  <div style="background:var(--stone-light);border:3px solid var(--gold);border-radius:8px;padding:24px;max-width:450px;width:95%;max-height:80vh;overflow-y:auto;" id="modalContent"></div>
 </div>
 
-<!-- EQUIPMENT MODAL -->
-<div class="modal-overlay" id="modal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:1000;align-items:center;justify-content:center;">
-  <div style="background:var(--panel-bg);border:2px solid var(--gold);border-radius:8px;padding:20px;max-width:400px;max-height:80vh;overflow-y:auto;box-shadow:0 0 20px rgba(0,0,0,0.8);" id="modalContent"></div>
-</div>
-
-<!-- MAIN UI -->
 <div class="wrapper">
   <header>
     <div>
@@ -556,8 +477,7 @@
   </header>
 
   <div class="main-grid">
-    <!-- LEFT: ROSTER + LOG -->
-    <div style="display:flex;flex-direction:column;gap:12px;">
+    <div style="display:flex;flex-direction:column;gap:20px;">
       <div class="panel">
         <div class="panel-title">Your Garrison</div>
         <div id="rosterList">
@@ -577,12 +497,11 @@
       </div>
     </div>
 
-    <!-- RIGHT: SHOP + EQUIPMENT + END DAY -->
-    <div style="display:flex;flex-direction:column;gap:12px;">
+    <div style="display:flex;flex-direction:column;gap:20px;">
       <div class="panel">
         <div class="panel-title">Barracks & Supplies</div>
         <div id="shopList"></div>
-        <div class="end-day-wrap" style="margin-top:14px;">
+        <div class="end-day-wrap">
           <button class="end-day-btn" id="endDayBtn" onclick="endDay()">Rest & Face the Night</button>
         </div>
       </div>
@@ -599,14 +518,12 @@
 // DEFINITIONS
 // ═══════════════════════════════════════════
 
-
-
 const TROOP_DEFS = {
   swordsman: { name:'Swordsman', icon:'⚔️', cost:2, maxHp:20, hpMin:6,  hpMax:10, turnsTilAtk:2, critChance:0,    desc:'Reliable frontline fighter.', color:'#4ac8d8' },
   archer:    { name:'Archer',    icon:'🏹', cost:3, maxHp:15, hpMin:3,  hpMax:8, turnsTilAtk:3, critChance:0,    airCapable:true, desc:'Can target Moths.', color:'#4ac8d8' },
-  mage:      { name:'Mage',      icon:'🔮', cost:5, maxHp:10, hpMin:4,  hpMax:16, turnsTilAtk:3, critChance:0,    airCapable:true, desc:'High variance dmg; targets Moths.', color:'#55aa44' },
-  giant:     { name:'Giant',     icon:'🗿', cost:5, maxHp:50, hpMin:6,  hpMax:10,  turnsTilAtk:4, critChance:0.25, desc:'Massive HP; 25% crit chance.', color:'#55aa44' },
-  tiger:     { name:'Tiger',     icon:'🐯', cost:6, maxHp:40, hpMin:8,  hpMax:12, turnsTilAtk:5, critChance:0.50, desc:'50% crit chance. Ferocious.', color:'#55aa44' },
+  mage:      { name:'Mage',      icon:'🔮', cost:5, maxHp:10, hpMin:4,  hpMax:16, turnsTilAtk:3, critChance:0,    airCapable:true, desc:'High variance dmg; targets Moths.', color:'#66cc55' },
+  giant:     { name:'Giant',     icon:'🗿', cost:5, maxHp:50, hpMin:6,  hpMax:10,  turnsTilAtk:4, critChance:0.25, desc:'Massive HP; 25% crit chance.', color:'#66cc55' },
+  tiger:     { name:'Tiger',     icon:'🐯', cost:6, maxHp:40, hpMin:8,  hpMax:12, turnsTilAtk:5, critChance:0.50, desc:'50% crit chance. Ferocious.', color:'#66cc55' },
 };
 
 const ENEMY_DEFS = {
@@ -618,7 +535,6 @@ const ENEMY_DEFS = {
   demon:        { name:'Demon',         icon:'👹', maxHp:200, hpMin:15, hpMax:50,  turnsTilAtk:3, critChance:0.1,  airOnly:false, lifesteal:0, isBoss:true },
 };
 
-// Level 2 stat upgrades for troops
 const TROOP_UPGRADES = {
   swordsman: { maxHp: 25, hpMin: 11, hpMax: 15, reqGarrisonLevel: 2 },
   archer:    { maxHp: 15, hpMin: 8,  hpMax: 12, reqGarrisonLevel: 2 },
@@ -627,20 +543,15 @@ const TROOP_UPGRADES = {
   tiger:     { maxHp: 60, hpMin: 0,  hpMax: 0, critChance: 0.75, reqGarrisonLevel: 3 },
 };
 
-// Equipment definitions
 const EQUIPMENT_DEFS = {
-  // Tier 1
   quickBoots:     { name: 'Quick Boots', icon: '👢', tier: 1, tta: -1 },
   leatherArmor:   { name: 'Leather Armor', icon: '🛡️', tier: 1, hpMult: 1.25 },
   sharpenedSteel: { name: 'Sharpened Steel', icon: '⚔️', tier: 1, dmgMult: 1.25 },
-  // Tier 2
   fullPlate:      { name: 'Full Plate', icon: '🏰', tier: 2, hpMult: 2, tta: 2 },
   hotShot:        { name: 'Hot Shot', icon: '🔥', tier: 2, dmgMult: 1.5, critChance: 0.25 },
   roguesCape:     { name: "Rogue's Cape", icon: '🌙', tier: 2, evasion: 0.25 },
 };
 
-
-// Wave definitions: [{type, count}, ...]
 const WAVES = [
   [ {type:'goblin', count:2} ],
   [ {type:'goblin', count:3}, {type:'moth', count:1} ],
@@ -672,11 +583,11 @@ function newGame() {
     nextId: 1,
     battleOver: false,
     gameOver: false,
-    won: false,
     maxTroops: 5,
     garrisonLevel: 1,
     equipment: [],
     nextEquipId: 1,
+    continueAction: null // Single source of truth for post-combat routing
   };
   battleSpeed = 1;
   clearLog();
@@ -684,9 +595,6 @@ function newGame() {
   showCharacterSelect(true);
 }
 
-// ═══════════════════════════════════════════
-// TROOP CREATION
-// ═══════════════════════════════════════════
 function makeTroop(typeKey) {
   const def = TROOP_DEFS[typeKey];
   return {
@@ -737,7 +645,6 @@ function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + m
 // ═══════════════════════════════════════════
 function generateCharChoices() {
   const keys = Object.keys(TROOP_DEFS);
-  // 75% chance for lower-cost troops (swordsman, archer), 25% for expensive ones
   const budget = keys.filter(k => TROOP_DEFS[k].cost <= 3);
   const expensive = keys.filter(k => TROOP_DEFS[k].cost > 3);
 
@@ -776,7 +683,7 @@ function showCharacterSelect(isFirst) {
     const def = TROOP_DEFS[key];
     const card = document.createElement('div');
     card.className = 'char-card';
-    const lvLabel = '<span class="level-badge lv1" style="border-color:' + def.color + ';background:rgba(' + hexToRgb(def.color) + ',0.18);color:' + def.color + ';">Lv 1</span>';
+    const lvLabel = '<span class="level-badge lv1" style="border-color:' + def.color + ';color:' + def.color + ';">Lv 1</span>';
 
     card.innerHTML = `
       <div class="char-icon">${def.icon}</div>
@@ -815,42 +722,37 @@ function renderShop() {
   const aliveTroops = state.troops.filter(t => t.hp > 0).length;
   const atCap = aliveTroops >= state.maxTroops;
 
-  list.innerHTML = `<div style="font-size:0.65rem;color:var(--parchment-dim);font-family:'Cinzel',serif;letter-spacing:0.1em;margin-bottom:10px;">
-    Garrison: ${aliveTroops} / ${state.maxTroops}${atCap ? ' — Full' : ''}
+  list.innerHTML = `<div style="font-size:0.9rem;font-weight:600;color:var(--parchment-dim);letter-spacing:0.05em;margin-bottom:12px;">
+    Garrison Capacity: ${aliveTroops} / ${state.maxTroops}${atCap ? ' (FULL)' : ''}
   </div>`;
 
-  // Garrison Expansion Upgrade
   const canUpgradeGarrison = state.gold >= 4 && state.garrisonLevel < 3;
   const expansionDiv = document.createElement('div');
   expansionDiv.className = 'shop-item' + (canUpgradeGarrison ? '' : ' disabled');
-  expansionDiv.style.marginBottom = '6px';
-  const expansionText = state.garrisonLevel >= 3 ? 'Garrison Maxed (Lv3)' : `Garrison Expansion <span style="font-size:0.58rem;color:var(--purple);border:1px solid var(--purple);border-radius:2px;padding:1px 5px;font-family:'Cinzel',serif;letter-spacing:0.1em;">Lv${state.garrisonLevel}</span>`;
+  const expansionText = state.garrisonLevel >= 3 ? 'Garrison Maxed (Lv3)' : `Garrison Expansion <span style="font-size:0.75rem;font-weight:bold;color:var(--purple);border:2px solid var(--purple);border-radius:4px;padding:2px 8px;margin-left:8px;">Lv${state.garrisonLevel}</span>`;
   expansionDiv.innerHTML = `
     <div class="shop-icon">⬆️</div>
     <div class="shop-info">
       <div class="shop-name">${expansionText}</div>
-      <div class="shop-desc">${state.garrisonLevel >= 3 ? 'Maximum capacity reached' : `Increase max team size to ${state.maxTroops + 1}`}</div>
+      <div class="shop-desc">${state.garrisonLevel >= 3 ? 'Maximum capacity reached.' : `Increase max team size to ${state.maxTroops + 1}.`}</div>
     </div>
     <button class="buy-btn" ${canUpgradeGarrison ? '' : 'disabled'} onclick="buyGarrisonUpgrade()">4g</button>
   `;
   list.appendChild(expansionDiv);
 
-  // Field Medic / Heal
   const canHeal = state.gold >= 3 && state.troops.some(t => t.hp > 0 && t.hp < t.maxHp);
   const healDiv = document.createElement('div');
   healDiv.className = 'shop-item' + (canHeal ? '' : ' disabled');
-  healDiv.style.marginBottom = '6px';
   healDiv.innerHTML = `
     <div class="shop-icon">🏥</div>
     <div class="shop-info">
-      <div class="shop-name">Field Medic <span style="font-size:0.58rem;color:var(--teal);border:1px solid var(--teal);border-radius:2px;padding:1px 5px;font-family:'Cinzel',serif;letter-spacing:0.1em;">Supply</span></div>
-      <div class="shop-desc">Heal all troops to half their max HP</div>
+      <div class="shop-name">Field Medic <span style="font-size:0.75rem;font-weight:bold;color:var(--teal);border:2px solid var(--teal);border-radius:4px;padding:2px 8px;margin-left:8px;">Supply</span></div>
+      <div class="shop-desc">Heal all living troops to half their max HP.</div>
     </div>
     <button class="buy-btn" ${canHeal ? '' : 'disabled'} onclick="buyHeal()">3g</button>
   `;
   list.appendChild(healDiv);
 
-  // Recruitment Items
   const items = [
     { key:'swordsman', cost:2 },
     { key:'archer',    cost:3 },
@@ -864,7 +766,7 @@ function renderShop() {
     const canAfford = state.gold >= item.cost && !atCap;
     const div = document.createElement('div');
     div.className = 'shop-item' + (canAfford ? '' : ' disabled');
-    const colorBadge = '<span class="level-badge lv1" style="border-color:' + def.color + ';background:rgba(' + hexToRgb(def.color) + ',0.18);color:' + def.color + ';">Lv1</span>';
+    const colorBadge = '<span class="level-badge lv1" style="border-color:' + def.color + ';color:' + def.color + ';">Lv1</span>';
     const dmgStr = `${def.hpMin}–${def.hpMax} dmg`;
     const desc = `${def.maxHp} HP · ${dmgStr} · Atk every ${def.turnsTilAtk}t${def.airCapable ? ' · Air' : ''}`;
     div.innerHTML = `
@@ -920,7 +822,6 @@ function upgradeTroop(id) {
   state.gold -= upgradeCost;
   troop.level = 2;
   
-  // Apply stat upgrades
   const upgrade = TROOP_UPGRADES[troop.typeKey];
   if (upgrade) {
     if (upgrade.maxHp !== undefined) troop.maxHp = upgrade.maxHp;
@@ -934,11 +835,6 @@ function upgradeTroop(id) {
   renderAll();
 }
 
-function hexToRgb(hex) {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result ? `${parseInt(result[1], 16)},${parseInt(result[2], 16)},${parseInt(result[3], 16)}` : '200,190,170';
-}
-
 // ═══════════════════════════════════════════
 // ROSTER
 // ═══════════════════════════════════════════
@@ -949,6 +845,9 @@ function renderRoster() {
     return;
   }
   list.innerHTML = '';
+  
+  const aliveTroopCount = state.troops.filter(t => t.hp > 0).length;
+
   state.troops.forEach(t => {
     const pct = Math.max(0, (t.hp / t.maxHp) * 100);
     const barColor = pct > 50 ? 'var(--green)' : pct > 25 ? 'var(--gold)' : 'var(--blood-bright)';
@@ -961,8 +860,10 @@ function renderRoster() {
     const div = document.createElement('div');
     div.className = 'troop-slot' + (alive ? '' : ' dead');
     const lvBadge = t.level === 1 
-      ? '<span class="level-badge lv1" style="border-color:' + def.color + ';background:rgba(' + hexToRgb(def.color) + ',0.18);color:' + def.color + ';">Lv1</span>'
-      : '<span class="level-badge lv2" style="border-color:' + def.color + ';background:rgba(' + hexToRgb(def.color) + ',0.18);color:' + def.color + ';">Lv2</span>';
+      ? '<span class="level-badge lv1" style="border-color:' + def.color + ';color:' + def.color + ';">Lv1</span>'
+      : '<span class="level-badge lv2" style="border-color:' + def.color + ';color:' + def.color + ';">Lv2</span>';
+    
+    const deadBadge = !alive ? '<span class="level-badge" style="border-color:var(--blood-bright);color:var(--blood-bright);">[DEFEATED]</span>' : '';
     
     const upgrade = TROOP_UPGRADES[t.typeKey];
     const reqGarrisonLevel = upgrade ? (upgrade.reqGarrisonLevel || 2) : 0;
@@ -972,23 +873,22 @@ function renderRoster() {
     
     let upgradeBtn = '';
     if (canUpgrade) {
-      const btnStyle = canAffordUpgrade ? 'padding:4px 8px;font-size:0.65rem;' : 'padding:4px 8px;font-size:0.65rem;opacity:0.35;cursor:not-allowed;';
+      const btnStyle = canAffordUpgrade ? 'padding:6px 12px;font-size:0.85rem;' : 'padding:6px 12px;font-size:0.85rem;opacity:0.4;cursor:not-allowed;';
       const btnDisabled = canAffordUpgrade ? '' : 'disabled';
-      upgradeBtn = `<button class="buy-btn" style="${btnStyle}" ${btnDisabled} onclick="upgradeTroop(${t.id})">${upgradeCost}g</button>`;
+      upgradeBtn = `<button class="buy-btn" style="${btnStyle}" ${btnDisabled} onclick="upgradeTroop(${t.id})">Upgrade: ${upgradeCost}g</button>`;
     }
     
-    // Build equipment slots HTML
     let equipmentSlotsHtml = '';
     if (alive) {
-      equipmentSlotsHtml = '<div style="display:flex;gap:4px;margin-top:4px;flex-wrap:wrap;">';
+      equipmentSlotsHtml = '<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">';
       t.equipment.forEach((eqId, slotIdx) => {
         if (eqId !== null) {
           if (t.equipmentData === undefined) t.equipmentData = {};
           const typeKey = t.equipmentData[slotIdx];
           const eqName = EQUIPMENT_DEFS[typeKey] ? EQUIPMENT_DEFS[typeKey].name : 'Unknown';
-          equipmentSlotsHtml += `<button class="buy-btn" style="padding:3px 6px;font-size:0.65rem;flex:1;min-width:60px;" onclick="unequipItem(${t.id}, ${slotIdx})">${EQUIPMENT_DEFS[typeKey].icon} ${eqName}</button>`;
+          equipmentSlotsHtml += `<button class="buy-btn" style="padding:6px 12px;font-size:0.85rem;flex:1;min-width:100px;" onclick="unequipItem(${t.id}, ${slotIdx})">${EQUIPMENT_DEFS[typeKey].icon} ${eqName}</button>`;
         } else {
-          equipmentSlotsHtml += `<div style="width:24px;height:24px;border:1px dashed var(--gold);border-radius:3px;background:rgba(0,0,0,0.3);"></div>`;
+          equipmentSlotsHtml += `<div style="width:36px;height:36px;border:2px dashed var(--stone-border);border-radius:6px;background:rgba(0,0,0,0.2);"></div>`;
         }
       });
       equipmentSlotsHtml += '</div>';
@@ -997,7 +897,7 @@ function renderRoster() {
     div.innerHTML = `
       <div class="troop-icon">${t.icon}</div>
       <div class="troop-info">
-        <div class="troop-name">${t.name} ${lvBadge}</div>
+        <div class="troop-name">${t.name} ${lvBadge} ${deadBadge}</div>
         <div class="hp-bar-wrap">
           <div class="hp-bar" style="width:${pct}%;background:${barColor};"></div>
         </div>
@@ -1005,9 +905,9 @@ function renderRoster() {
         <div class="attack-pip-row">${pips.join('')}</div>
         ${equipmentSlotsHtml}
       </div>
-      <div style="display:flex;gap:4px;flex-direction:column;align-items:center;flex-shrink:0;">
+      <div style="display:flex;gap:8px;flex-direction:column;align-items:center;flex-shrink:0;">
         ${upgradeBtn}
-        ${alive ? `<button class="remove-troop" onclick="removeTroop(${t.id})" title="Dismiss">✕</button>` : ''}
+        ${(alive && aliveTroopCount > 1) ? `<button class="remove-troop" onclick="removeTroop(${t.id})" title="Dismiss Unit">✕ Dismiss</button>` : ''}
       </div>
     `;
     list.appendChild(div);
@@ -1015,6 +915,12 @@ function renderRoster() {
 }
 
 function removeTroop(id) {
+  // Hard block to prevent empty garrisons outside of combat
+  if (state.troops.filter(t => t.hp > 0).length <= 1) {
+    log("Action blocked: Cannot dismiss your last remaining defender.", "warn");
+    return;
+  }
+
   const troop = state.troops.find(t => t.id === id);
   if (troop) {
     troop.equipment.forEach(eqId => {
@@ -1039,13 +945,13 @@ function renderWavePreview() {
     return;
   }
   const isBossWave = WAVES[state.wave-1].some(g => ENEMY_DEFS[g.type].isBoss);
-  title.textContent = `Wave ${state.wave} of ${WAVES.length}${isBossWave ? ' ⚠ Miniboss' : ''}`;
-  if (isBossWave) title.style.color = 'var(--purple)'; else title.style.color = 'var(--gold)';
+  title.textContent = `Wave ${state.wave} of ${WAVES.length}${isBossWave ? ' [MINIBOSS]' : ''}`;
+  if (isBossWave) title.style.color = 'var(--purple)'; else title.style.color = 'var(--gold-bright)';
   const wave = WAVES[state.wave - 1];
   preview.innerHTML = wave.map(g => {
     const def = ENEMY_DEFS[g.type];
     const bossStyle = def.isBoss
-      ? 'background:rgba(136,85,204,0.18);border-color:var(--purple);color:var(--purple);'
+      ? 'background:rgba(166,115,240,0.18);border-color:var(--purple);color:var(--purple);'
       : '';
     return `<div class="enemy-chip" style="${bossStyle}">${def.icon} ${g.count}× ${def.name}${def.isBoss ? ' [BOSS]' : ''}</div>`;
   }).join('');
@@ -1075,7 +981,7 @@ function endDay() {
   }
   const aliveTroops = state.troops.filter(t => t.hp > 0);
   if (!aliveTroops.length) {
-    showResult(false, 'Your garrison fell without a single defender. The darkness claims all.');
+    triggerLoseScreen();
     return;
   }
   log(`Night ${state.day} — Wave ${state.wave} begins!`, 'info');
@@ -1089,7 +995,6 @@ function startBattle() {
   const waveIndex = state.wave - 1;
   const waveDef = WAVES[waveIndex];
 
-  // Build combatants (deep clone HP for battle without affecting roster perms)
   const allies = state.troops.filter(t => t.hp > 0).map(t => ({
     ...t, atkTimer: 0, alive: true, battleHp: t.hp,
   }));
@@ -1109,7 +1014,7 @@ function startBattle() {
   document.getElementById('battleOverlay').classList.add('active');
   const isBossWave = WAVES[state.wave-1].some(g => ENEMY_DEFS[g.type].isBoss);
   document.getElementById('battleWaveTitle').textContent = isBossWave
-    ? `⚠ Night Falls — Wave ${state.wave} · MINIBOSS`
+    ? `Night Falls — Wave ${state.wave} [MINIBOSS]`
     : `Night Falls — Wave ${state.wave}`;
 
   setSpeed(1);
@@ -1133,11 +1038,9 @@ function battleTick() {
   const aliveAllies = allies.filter(a => a.alive);
   const aliveEnemies = enemies.filter(e => e.alive);
 
-  // Skeleton revival: revive skeletons that have been dead for 4 turns, but not if all enemies are already dead
   enemies.filter(e => e.typeKey === 'skeleton' && !e.alive).forEach(skeleton => {
     if (skeleton.turnsDead === undefined) skeleton.turnsDead = 0;
     skeleton.turnsDead++;
-    // Only revive if there are still alive enemies (meaning battle hasn't been decided)
     const hasAliveEnemies = enemies.some(e => e.alive);
     if (skeleton.turnsDead >= 4 && hasAliveEnemies) {
       skeleton.alive = true;
@@ -1149,13 +1052,11 @@ function battleTick() {
     }
   });
 
-  // Allies attack
   aliveAllies.forEach(ally => {
     if (!ally.alive) return;
     ally.atkTimer++;
     if (ally.atkTimer >= ally.turnsTilAtk) {
       ally.atkTimer = 0;
-      // Re-query live enemies at attack time (allies earlier in the loop may have killed some)
       const currentAlive = enemies.filter(e => e.alive);
       let targets = currentAlive.filter(e => ally.airCapable || !e.airOnly);
       let glancingBlow = false;
@@ -1176,7 +1077,6 @@ function battleTick() {
     }
   });
 
-  // Enemies attack
   aliveEnemies.forEach(enemy => {
     if (!enemy.alive) return;
     enemy.atkTimer++;
@@ -1188,7 +1088,7 @@ function battleTick() {
       let dmg = rand(enemy.hpMin, enemy.hpMax);
       let isCrit = Math.random() < enemy.critChance;
       if (isCrit) dmg *= 2;
-      // Evasion check: if target has evasion equipment, might dodge entirely
+
       let dodgedMsg = '';
       let evaded = false;
       target.equipment.forEach(eqId => {
@@ -1204,7 +1104,6 @@ function battleTick() {
       });
       if (evaded) dmg = 0;
       
-      // Giant block: if target is not a Giant and an alive Giant exists, absorb 25%
       let blockMsg = '';
       if (!evaded && target.typeKey !== 'giant') {
         const giantsAlive = allies.filter(a => a.alive && a.typeKey === 'giant');
@@ -1229,7 +1128,6 @@ function battleTick() {
     }
   });
 
-  // Check end
   const anyAliveAllies = allies.some(a => a.alive);
   const anyAliveEnemies = enemies.some(e => e.alive);
 
@@ -1252,21 +1150,36 @@ function battleTick() {
 }
 
 function resolveBattle(won) {
-  // Apply HP changes back to main roster
+  // Sync HP back to main roster state
   battleState.allies.forEach(bAlly => {
     const troop = state.troops.find(t => t.id === bAlly.id);
     if (troop) { troop.hp = bAlly.battleHp; }
   });
 
-  // Store result for later
-  state.battleResult = { won };
-  if (won) {
-    state.battleResult.goldReward = 2 + state.wave;
+  // Strict Routing State Definition
+  const continueBtn = document.getElementById('nextDayBtn');
+  if (!won) {
+    state.continueAction = 'lose';
+    continueBtn.textContent = 'Accept Defeat';
+    continueBtn.style.background = 'var(--blood)';
+    continueBtn.style.borderColor = 'var(--blood-bright)';
+  } else if (state.wave >= WAVES.length) {
+    state.continueAction = 'win';
+    continueBtn.textContent = 'Claim Final Victory';
+    continueBtn.style.background = 'var(--purple)';
+    continueBtn.style.borderColor = 'var(--gold-bright)';
+    state.battleResult = { goldReward: 2 + state.wave };
+  } else {
+    state.continueAction = 'next_wave';
+    continueBtn.textContent = 'Continue to Next Day';
+    continueBtn.style.background = 'var(--gold-dim)';
+    continueBtn.style.borderColor = 'var(--gold-bright)';
+    state.battleResult = { goldReward: 2 + state.wave };
   }
 
-  // Show Next Day button instead of hiding battle overlay
+  // Swap UI buttons
   document.getElementById('skipBattleBtn').style.display = 'none';
-  document.getElementById('nextDayBtn').style.display = 'block';
+  continueBtn.style.display = 'block';
   
   // Disable speed controls
   document.getElementById('speed1Btn').disabled = true;
@@ -1274,11 +1187,16 @@ function resolveBattle(won) {
   document.getElementById('speed3Btn').disabled = true;
 }
 
-function proceedNextDay() {
-  const result = state.battleResult;
-  state.battleResult = null;
-  
-  // Clear dead troops from garrison and remove their equipment
+function handleContinueClick() {
+  // 1. Aggressive Teardown of the active board
+  document.getElementById('battleOverlay').classList.remove('active');
+  document.getElementById('nextDayBtn').style.display = 'none';
+  document.getElementById('skipBattleBtn').style.display = 'block';
+  document.getElementById('speed1Btn').disabled = false;
+  document.getElementById('speed2Btn').disabled = false;
+  document.getElementById('speed3Btn').disabled = false;
+
+  // Clear dead troops & strip equipment globally
   const deadTroops = state.troops.filter(t => t.hp <= 0);
   deadTroops.forEach(t => {
     t.equipment.forEach(eqId => {
@@ -1289,36 +1207,51 @@ function proceedNextDay() {
     });
   });
   state.troops = state.troops.filter(t => t.hp > 0);
-  
-  document.getElementById('battleOverlay').classList.remove('active');
-  document.getElementById('nextDayBtn').style.display = 'none';
-  document.getElementById('skipBattleBtn').style.display = 'block';
-  document.getElementById('speed1Btn').disabled = false;
-  document.getElementById('speed2Btn').disabled = false;
-  document.getElementById('speed3Btn').disabled = false;
 
-  if (result.won) {
-    state.gold += result.goldReward;
-    log(`Wave ${state.wave} defeated! Earned ${result.goldReward}g.`, 'win');
-    
-    // Generate equipment drops
-    generateEquipmentDrops(state.wave);
-    
-    state.wave++;
-    state.day++;
-    renderAll();
-
-    if (state.wave > WAVES.length) {
-      showFinalVictory();
-    } else {
-      showResult(true, `The horde is driven back. You earned ${result.goldReward} gold.\n\nPrepare for Wave ${state.wave}...`);
-    }
-  } else {
-    log(`Wave ${state.wave} — the garrison fell. All is lost.`, 'lose');
-    state.gameOver = true;
-    renderAll();
-    showResult(false, 'Your last defender has fallen. The darkness swallows the Bastion.\n\nAll is silence.');
+  // 2. Strict Routing Evaluation
+  switch (state.continueAction) {
+    case 'lose':
+      triggerLoseScreen();
+      break;
+    case 'next_wave':
+      startNextWave();
+      break;
+    case 'win':
+      triggerWinScreen();
+      break;
+    default:
+      console.error("Continue clicked without a valid action state.");
   }
+}
+
+function startNextWave() {
+  const reward = state.battleResult.goldReward;
+  state.gold += reward;
+  log(`Wave ${state.wave} defeated! Earned ${reward}g.`, 'win');
+  generateEquipmentDrops(state.wave);
+
+  state.wave++;
+  state.day++;
+  
+  // Clear isolated state
+  state.continueAction = null;
+  state.battleResult = null;
+  
+  // Return seamlessly to the main screen
+  renderAll();
+}
+
+function triggerLoseScreen() {
+  log(`Wave ${state.wave} — the garrison fell. All is lost.`, 'lose');
+  state.gameOver = true;
+  renderAll();
+  showResult(false, 'Your last defender has fallen. The darkness swallows the Bastion.\n\nAll is silence.');
+}
+
+function triggerWinScreen() {
+  state.gameOver = true;
+  renderAll();
+  showFinalVictory();
 }
 
 function generateEquipmentDrops(wave) {
@@ -1341,19 +1274,16 @@ function generateEquipmentDrops(wave) {
   
   let drops = [];
   
-  // Tier 1 roll
   if (Math.random() < rates.tier1) {
     const eq = tier1Eq[Math.floor(Math.random() * tier1Eq.length)];
     drops.push(eq);
   }
   
-  // Tier 2 roll
   if (Math.random() < rates.tier2) {
     const eq = tier2Eq[Math.floor(Math.random() * tier2Eq.length)];
     drops.push(eq);
   }
   
-  // Add drops to inventory
   drops.forEach(typeKey => {
     state.equipment.push({
       id: state.nextEquipId++,
@@ -1361,7 +1291,7 @@ function generateEquipmentDrops(wave) {
       icon: EQUIPMENT_DEFS[typeKey].icon,
       name: EQUIPMENT_DEFS[typeKey].name,
     });
-    log(`Found ${EQUIPMENT_DEFS[typeKey].icon} ${EQUIPMENT_DEFS[typeKey].name}`, 'item');
+    log(`Found ${EQUIPMENT_DEFS[typeKey].icon} ${EQUIPMENT_DEFS[typeKey].name}`, 'info');
   });
 }
 
@@ -1372,7 +1302,6 @@ function equipItem(troopId, equipId, slot) {
   const eq = state.equipment.find(e => e.id === equipId);
   if (!eq) return;
   
-  // Remove existing equipment in this slot and reverse effects
   if (troop.equipment[slot] !== null) {
     if (troop.equipmentData === undefined) troop.equipmentData = {};
     const oldTypeKey = troop.equipmentData[slot];
@@ -1381,7 +1310,6 @@ function equipItem(troopId, equipId, slot) {
     }
   }
   
-  // Add new equipment
   troop.equipment[slot] = equipId;
   if (troop.equipmentData === undefined) troop.equipmentData = {};
   troop.equipmentData[slot] = eq.typeKey;
@@ -1389,7 +1317,6 @@ function equipItem(troopId, equipId, slot) {
   const eqDef = EQUIPMENT_DEFS[eq.typeKey];
   applyEquipmentEffects(troop, eq.typeKey, eqDef);
   
-  // Remove from inventory
   state.equipment = state.equipment.filter(e => e.id !== equipId);
   
   log(`${troop.name} equipped ${eqDef.icon} ${eqDef.name}`, 'info');
@@ -1404,12 +1331,10 @@ function unequipItem(troopId, slot) {
   const typeKey = troop.equipmentData[slot];
   const equipId = troop.equipment[slot];
   
-  // Reverse stat effects
   if (typeKey) {
     removeEquipmentEffects(troop, typeKey);
   }
   
-  // Add back to inventory
   const eqDef = EQUIPMENT_DEFS[typeKey];
   state.equipment.push({
     id: equipId,
@@ -1448,7 +1373,6 @@ function removeEquipmentEffects(troop, eqTypeKey) {
   const eqDef = EQUIPMENT_DEFS[eqTypeKey];
   if (!eqDef) return;
   
-  // Reverse multiplicative effects by dividing
   if (eqDef.hpMult) {
     const oldMaxHp = troop.maxHp;
     troop.maxHp = Math.floor(troop.maxHp / eqDef.hpMult);
@@ -1475,25 +1399,20 @@ function renderEquipmentInventory() {
   container.innerHTML = '';
   
   if (state.equipment.length === 0) {
-    container.innerHTML = '<div style="font-size:0.8rem;color:var(--gray);">No items yet...</div>';
+    container.innerHTML = '<div style="font-size:0.95rem;font-weight:600;color:var(--parchment-dim);">No items yet...</div>';
     return;
   }
   
-  const titleDiv = document.createElement('div');
-  titleDiv.style.cssText = 'color:var(--light);font-weight:bold;margin-bottom:8px;font-size:0.9rem;';
-  titleDiv.textContent = '⚔️ Equipment Inventory';
-  container.appendChild(titleDiv);
-  
   const itemsDiv = document.createElement('div');
   itemsDiv.style.display = 'grid';
-  itemsDiv.style.gridTemplateColumns = 'repeat(auto-fill, minmax(70px, 1fr))';
-  itemsDiv.style.gap = '4px';
+  itemsDiv.style.gridTemplateColumns = 'repeat(auto-fill, minmax(80px, 1fr))';
+  itemsDiv.style.gap = '12px';
   
   state.equipment.forEach(eq => {
     const itemBtn = document.createElement('button');
     itemBtn.className = 'buy-btn';
-    itemBtn.style.cssText = 'padding:6px;font-size:0.75rem;display:flex;flex-direction:column;align-items:center;gap:2px;height:auto;cursor:pointer;';
-    itemBtn.innerHTML = `<div style="font-size:1.2rem;">${eq.icon}</div><div>${eq.name}</div>`;
+    itemBtn.style.cssText = 'padding:10px;font-size:0.85rem;display:flex;flex-direction:column;align-items:center;gap:6px;height:auto;cursor:pointer;';
+    itemBtn.innerHTML = `<div style="font-size:1.6rem;">${eq.icon}</div><div style="text-align:center;">${eq.name}</div>`;
     itemBtn.onclick = () => showEquipmentMenu(eq);
     itemsDiv.appendChild(itemBtn);
   });
@@ -1511,42 +1430,47 @@ function showEquipmentMenu(eq) {
   modalContent.innerHTML = '';
   
   const titleDiv = document.createElement('div');
-  titleDiv.style.cssText = 'color:var(--light);font-weight:bold;margin-bottom:12px;font-size:1.1rem;';
-  titleDiv.innerHTML = `${eq.icon} ${eq.name}`;
+  titleDiv.style.cssText = 'color:var(--gold-bright);font-weight:bold;margin-bottom:16px;font-size:1.3rem;font-family:\'Cinzel\',serif;';
+  titleDiv.innerHTML = `${eq.icon} Equip ${eq.name}`;
   modalContent.appendChild(titleDiv);
   
   const instructionDiv = document.createElement('div');
-  instructionDiv.style.cssText = 'font-size:0.9rem;color:var(--gray);margin-bottom:12px;';
-  instructionDiv.textContent = 'Select a troop and slot:';
+  instructionDiv.style.cssText = 'font-size:1rem;color:var(--parchment);margin-bottom:20px;';
+  instructionDiv.textContent = 'Select a troop and slot to equip this item:';
   modalContent.appendChild(instructionDiv);
   
   troopsWithSlots.forEach(({ troop, slots }) => {
     const troopDiv = document.createElement('div');
-    troopDiv.style.cssText = 'margin-bottom:8px;padding:8px;background:rgba(100,100,100,0.3);border-radius:4px;border-left:3px solid var(--gold);';
+    troopDiv.style.cssText = 'margin-bottom:16px;padding:12px;background:var(--stone);border-radius:6px;border-left:4px solid var(--gold);';
     
     const troopNameDiv = document.createElement('div');
-    troopNameDiv.style.cssText = 'color:var(--light);font-weight:bold;margin-bottom:6px;';
+    troopNameDiv.style.cssText = 'color:var(--gold-bright);font-weight:bold;margin-bottom:12px;font-size:1.1rem;';
     troopNameDiv.innerHTML = `${troop.icon} ${troop.name}`;
     troopDiv.appendChild(troopNameDiv);
     
+    const slotsDiv = document.createElement('div');
+    slotsDiv.style.display = 'flex';
+    slotsDiv.style.gap = '10px';
+
     slots.forEach(({ slotIdx, occupied }) => {
       const slotBtn = document.createElement('button');
       slotBtn.className = 'buy-btn';
-      slotBtn.style.cssText = 'width:100%;margin:3px 0;font-size:0.85rem;';
-      slotBtn.textContent = `Slot ${slotIdx + 1} ${occupied ? '(occupied)' : '(empty)'}`;
+      slotBtn.style.cssText = 'flex:1;min-height:44px;font-size:0.9rem;';
+      slotBtn.textContent = `Slot ${slotIdx + 1} ${occupied ? '(Replace)' : '(Empty)'}`;
       slotBtn.onclick = () => {
         equipItem(troop.id, eq.id, slotIdx);
         document.getElementById('modal').style.display = 'none';
       };
-      troopDiv.appendChild(slotBtn);
+      slotsDiv.appendChild(slotBtn);
     });
     
+    troopDiv.appendChild(slotsDiv);
     modalContent.appendChild(troopDiv);
   });
   
   const closeBtn = document.createElement('button');
   closeBtn.className = 'buy-btn';
-  closeBtn.style.cssText = 'width:100%;margin-top:12px;';
+  closeBtn.style.cssText = 'width:100%;margin-top:20px;min-height:44px;font-size:1rem;border-color:var(--stone-border);color:var(--parchment);';
   closeBtn.textContent = 'Cancel';
   closeBtn.onclick = () => {
     document.getElementById('modal').style.display = 'none';
@@ -1618,7 +1542,6 @@ function skipBattle() {
   }
 
   const won = enemies.every(e => !e.alive);
-  document.getElementById('battleOverlay').classList.remove('active');
   resolveBattle(won);
 }
 
@@ -1649,11 +1572,11 @@ function renderBattleUnits() {
     const div = document.createElement('div');
     div.className = 'battle-unit' + (!a.alive ? ' dead' : '');
     div.innerHTML = `
-      <div class="battle-unit-name">${a.icon} ${a.name}</div>
-      <div style="background:var(--stone-mid);border-radius:2px;height:4px;margin-top:4px;">
-        <div style="width:${pct}%;height:4px;border-radius:2px;background:${barColor};transition:width 0.2s;"></div>
+      <div class="battle-unit-name">${a.icon} ${a.name} ${!a.alive ? '<span style="color:var(--blood-bright);font-size:0.8rem;">[DEFEATED]</span>' : ''}</div>
+      <div style="background:var(--stone-mid);border-radius:4px;height:8px;margin-top:8px;">
+        <div style="width:${pct}%;height:8px;border-radius:4px;background:${barColor};transition:width 0.2s;"></div>
       </div>
-      <div style="font-size:0.6rem;color:var(--parchment-dim);margin-top:2px;">${a.battleHp}/${a.maxHp} HP</div>
+      <div style="font-size:0.85rem;font-weight:600;color:var(--parchment-dim);margin-top:4px;">${a.battleHp}/${a.maxHp} HP</div>
     `;
     alliesEl.appendChild(div);
   });
@@ -1666,11 +1589,11 @@ function renderBattleUnits() {
     div.className = 'battle-unit' + (!e.alive ? ' dead' : '');
     if (e.isBoss) div.style.borderColor = 'var(--purple)';
     div.innerHTML = `
-      <div class="battle-unit-name">${e.icon} ${e.name}${e.isBoss ? ' <span style="font-size:0.55rem;color:var(--purple);font-family:\'Cinzel\',serif;">[BOSS]</span>' : ''}${e.airOnly ? ' <span style="font-size:0.55rem;color:var(--ice);">[air]</span>' : ''}${e.lifesteal ? ' <span style="font-size:0.55rem;color:var(--green);">[lifesteal]</span>' : ''}</div>
-      <div style="background:var(--stone-mid);border-radius:2px;height:4px;margin-top:4px;">
-        <div style="width:${pct}%;height:4px;border-radius:2px;background:${barColor};transition:width 0.3s;"></div>
+      <div class="battle-unit-name">${e.icon} ${e.name}${e.isBoss ? ' <span style="font-size:0.8rem;color:var(--purple);font-family:\'Cinzel\',serif;">[BOSS]</span>' : ''}${e.airOnly ? ' <span style="font-size:0.8rem;color:var(--ice);">[air]</span>' : ''}${e.lifesteal ? ' <span style="font-size:0.8rem;color:var(--green);">[lifesteal]</span>' : ''} ${!e.alive ? '<span style="color:var(--parchment-dim);font-size:0.8rem;">[DEFEATED]</span>' : ''}</div>
+      <div style="background:var(--stone-mid);border-radius:4px;height:8px;margin-top:8px;">
+        <div style="width:${pct}%;height:8px;border-radius:4px;background:${barColor};transition:width 0.3s;"></div>
       </div>
-      <div style="font-size:0.6rem;color:var(--parchment-dim);margin-top:2px;">${e.hp}/${e.maxHp} HP</div>
+      <div style="font-size:0.85rem;font-weight:600;color:var(--parchment-dim);margin-top:4px;">${e.hp}/${e.maxHp} HP</div>
     `;
     enemiesEl.appendChild(div);
   });
@@ -1698,16 +1621,7 @@ function showResult(won, msg) {
   msgEl.textContent = msg;
 
   btns.innerHTML = '';
-  if (won && state.wave <= WAVES.length) {
-    const cont = document.createElement('button');
-    cont.className = 'result-btn';
-    cont.textContent = 'Continue to Day ' + state.day;
-    cont.onclick = () => {
-      overlay.classList.remove('active');
-      renderAll();
-    };
-    btns.appendChild(cont);
-  } else if (!won) {
+  if (!won) {
     const restart = document.createElement('button');
     restart.className = 'result-btn';
     restart.textContent = 'Start Again';
@@ -1719,8 +1633,6 @@ function showResult(won, msg) {
 }
 
 function showFinalVictory() {
-  state.gameOver = true;
-  renderAll();
   const overlay = document.getElementById('resultOverlay');
   const title = document.getElementById('resultTitle');
   const msgEl = document.getElementById('resultMsg');
@@ -1755,7 +1667,7 @@ document.addEventListener('keydown', e => {
 function startGame() {
   document.getElementById('introOverlay').style.opacity = '0';
   document.getElementById('introOverlay').style.pointerEvents = 'none';
-  setTimeout(() => { document.getElementById('introOverlay').style.display = 'none'; }, 500);
+  setTimeout(() => { document.getElementById('introOverlay').style.display = 'none'; }, 400);
   newGame();
 }
 </script>
